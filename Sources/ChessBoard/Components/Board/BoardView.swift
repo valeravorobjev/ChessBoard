@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct BoardView: View {
-    @ObservedObject var board: Board
+    public @ObservedObject var board: Board
     
     public var body: some View {
         GeometryReader { geometry in
