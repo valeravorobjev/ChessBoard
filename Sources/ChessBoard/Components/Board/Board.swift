@@ -8,62 +8,79 @@
 import SwiftUI
 
 public class Board: ObservableObject {
-    private var selectedCell: Cell? = nil
-    private var possibleCells: [Cell] = []
+    internal private(set) var selectedCell: Cell? = nil
+    internal private(set) var possibleCells: [Cell] = []
+    internal private(set) var selectedIndex: LocationIndex? = nil
     
-    internal let boardNumbers: [Int] = [1,2,3,4,5,6,7,8]
-    internal let boardChars: [Character] = ["a", "b", "c", "d", "e", "f", "g", "h"]
-    internal var boardMode: BoardMode = .game
+    internal var rotated: Bool = false
+    internal var boardNumbers: [Int] = [8,7,6,5,4,3,2,1]
+    internal var boardChars: [Character] = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    internal private(set) var boardMode: BoardMode = .game
+    internal private(set) var playerColor: PieceColor = .white
+    internal private(set) var beginNumberIndex = 7
+    internal private(set) var endNumberIndex = 0
+    internal private(set) var beginCharIndex = 0
+    internal private(set) var endCharIndex = 7
     
-    @Published var playerColor: PColor = .black
-    @Published var cells: Dictionary<String, Cell> = Dictionary<String, Cell>()
+    @Published var cells: [[Cell]] = []
     
-    public init() {
-        for i in 0..<8 {
-            for j in 0..<8{
-                let color = self.cellColor(i, j)
-                let scoord = self.cellCoord(i,j)
-                let show = self.cellCoordShow(i, j)
-                
-                let cell = Cell(color: color, scoord: scoord, show: show)
-                
-                cells[scoord] = cell
-            }
+    public init(boardMode: BoardMode = .game, playerColor: PieceColor = .white) {
+        
+        if playerColor == .black && !rotated {
+            boardNumbers.reverse()
         }
+        
+        if playerColor == .white && rotated {
+            boardNumbers.reverse()
+        }
+        
+        for numberIndex in 0..<8 {
+            var rowCells = [Cell]()
+            for charIndex in 0..<8 {
+                let color = self.cellColor(charIndex, numberIndex)
+                let location = self.cellCoord(charIndex, numberIndex)
+                let show = self.cellCoordShow(charIndex, numberIndex)
+                
+                let cell = Cell(color: color, location: location, show: show)
+                rowCells.append(cell)
+            }
+            cells.append(rowCells)
+        }
+        
     }
     
-    private func cellCoordShow(_ x: Int, _ y: Int, _ all: Bool = false) -> LShow {
-        var xshow = false
-        var yshow = false
+    private func cellCoordShow(_ charIndex: Int, _ numberIndex: Int, _ all: Bool = false) -> LocationShow {
+        var charShow = false
+        var numberShow = false
         
         if all {
-            return LShow(xshow: true, yshow: true)
+            return LocationShow(charShow: true, numberShow: true)
         }
         
-        if x == 7 {
-            xshow = true
+        if (playerColor == .white && numberIndex == 7) || (playerColor == .black && numberIndex == 0) {
+            charShow = true
         }
         
-        if y == 0 {
-            yshow = true
+        
+        if (playerColor == .white && charIndex == 0) || (playerColor == .black && charIndex == 7){
+            numberShow = true
         }
         
-        return LShow(xshow: xshow, yshow: yshow)
+        return LocationShow(charShow: charShow, numberShow: numberShow)
     }
     
-    private func cellColor(_ i: Int, _ j: Int) -> PColor {
-        var color: PColor = self.playerColor
+    private func cellColor(_ charIndex: Int, _ numberIndex: Int) -> PieceColor {
+        var color: PieceColor = self.playerColor
         
-        if (i + j) % 2 != 0 {
+        if (charIndex + numberIndex) % 2 != 0 {
             color = color.toggle()
         }
         
         return color
     }
     
-    internal func cellCoord(_ i: Int, _ j: Int) -> String {
-        let numbers = self.playerColor == .white ? boardNumbers.reversed() : boardNumbers
-        return "\(boardChars[j])\(numbers[i])"
+    internal func cellCoord(_ charIndex: Int, _ numberIndex: Int) -> LocationCell {
+        return LocationCell(char: boardChars[charIndex], number: boardNumbers[numberIndex])
     }
     
     internal func selectCell(cell: Cell) -> Void {
@@ -72,7 +89,7 @@ public class Board: ObservableObject {
             let pc = possibleCells.first(where: {$0.id == cell.id})
             
             for possibleCell in self.possibleCells {
-                possibleCell.possible.toggle()
+                possibleCell.unpossible()
             }
             
             self.possibleCells.removeAll()
@@ -87,70 +104,118 @@ public class Board: ObservableObject {
         if cell.piece == nil || (self.boardMode != .analisys && cell.piece?.color != self.playerColor) {
             selectedCell?.selected = false
             selectedCell = nil
+            selectedIndex = nil
             return
         }
         
         if cell.piece != nil && cell.id == selectedCell?.id {
             selectedCell!.selected = false
             selectedCell = nil
+            selectedIndex = nil
             return
         }
         
         selectedCell?.selected = false
         cell.selected.toggle()
         selectedCell = cell
+        selectedIndex = LocationIndex(sidx: boardChars.firstIndex(of: cell.location.char)!, nidx: boardNumbers.firstIndex(of: cell.location.number)!)
         
-        let possibleCoords = self.possibleMoves(by: selectedCell!.piece!.type, location: selectedCell!.location, color: selectedCell!.piece!.color)
+        let possibleIndexes = self.possibleMoves(by: selectedCell!.piece!.type, location: selectedIndex!, color: selectedCell!.piece!.color)
         
-        for possibleCoord in possibleCoords {
-            let possibleCell = self.cells[possibleCoord.toStr()]!
+        for possibleIndex in possibleIndexes {
+            let possibleCell = self.cells[possibleIndex.nidx][possibleIndex.sidx]
             possibleCells.append(possibleCell)
             
             possibleCell.possible.toggle()
         }
     }
     
-    public func initBoard() {
-        cells["a2"]?.setPiece(.pown, .white)
-        cells["b2"]?.setPiece(.pown, .white)
-        cells["c2"]?.setPiece(.pown, .white)
-        cells["d2"]?.setPiece(.pown, .white)
-        cells["e2"]?.setPiece(.pown, .white)
-        cells["f2"]?.setPiece(.pown, .white)
-        cells["g2"]?.setPiece(.pown, .white)
-        cells["h2"]?.setPiece(.pown, .white)
+    public func clearBoard() -> Void {
+        self.selectedCell = nil
+        self.possibleCells.removeAll()
         
-        cells["b4"]?.setPiece(.rook, .white)
-        cells["e3"]?.setPiece(.knight, .white)
-        cells["c1"]?.setPiece(.bishop, .white)
-        cells["d1"]?.setPiece(.queen, .white)
-        cells["e1"]?.setPiece(.king, .white)
-        cells["f1"]?.setPiece(.bishop, .white)
-        cells["g1"]?.setPiece(.knight, .white)
-        cells["h1"]?.setPiece(.rook, .white)
         
-        cells["a7"]?.setPiece(.pown, .black)
-        cells["b7"]?.setPiece(.pown, .black)
-        cells["c7"]?.setPiece(.pown, .black)
-        cells["d7"]?.setPiece(.pown, .black)
-        cells["e7"]?.setPiece(.pown, .black)
-        cells["f7"]?.setPiece(.pown, .black)
-        cells["g7"]?.setPiece(.pown, .black)
-        cells["h7"]?.setPiece(.pown, .black)
-        
-        cells["a8"]?.setPiece(.rook, .black)
-        cells["b8"]?.setPiece(.knight, .black)
-        cells["c8"]?.setPiece(.bishop, .black)
-        cells["d8"]?.setPiece(.queen, .black)
-        cells["e4"]?.setPiece(.king, .black)
-        cells["f8"]?.setPiece(.bishop, .black)
-        cells["g8"]?.setPiece(.knight, .black)
-        cells["h8"]?.setPiece(.rook, .black)
+        for row in cells {
+            for cell in row {
+                cell.unpossible()
+                cell.removePiece()
+                cell.unselected()
+            }
+        }
     }
     
-    public func initBoard(pcoords: [PCoord]) {
-        for pcoord in pcoords {
-            cells[pcoord.scoord]?.setPiece(pcoord.type, pcoord.color)
+    public func initBoard() {
+        
+        clearBoard()
+        
+        let numberIndex0W = boardNumbers.firstIndex(of: boardNumbers.min()!)!
+        let numberIndex1W = boardNumbers.firstIndex(of: boardNumbers.min()! + 1)!
+        let numberIndex7B = boardNumbers.firstIndex(of: boardNumbers.max()!)!
+        let numberIndex6B = boardNumbers.firstIndex(of: boardNumbers.max()! - 1)!
+        
+        cells[numberIndex0W][0].setPiece(.rook, .white)
+        cells[numberIndex0W][1].setPiece(.knight, .white)
+        cells[numberIndex0W][2].setPiece(.bishop, .white)
+        cells[numberIndex0W][3].setPiece(.queen, .white)
+        cells[numberIndex0W][4].setPiece(.king, .white)
+        cells[numberIndex0W][5].setPiece(.bishop, .white)
+        cells[numberIndex0W][6].setPiece(.knight,.white)
+        cells[numberIndex0W][7].setPiece(.rook, .white)
+        
+        cells[numberIndex1W][0].setPiece(.pown, .white)
+        cells[numberIndex1W][1].setPiece(.pown, .white)
+        cells[numberIndex1W][2].setPiece(.pown, .white)
+        cells[numberIndex1W][3].setPiece(.pown, .white)
+        cells[numberIndex1W][4].setPiece(.pown, .white)
+        cells[numberIndex1W][5].setPiece(.pown, .white)
+        cells[numberIndex1W][6].setPiece(.pown, .white)
+        cells[numberIndex1W][7].setPiece(.pown, .white)
+        
+        
+        cells[numberIndex7B][0].setPiece(.rook, .black)
+        cells[numberIndex7B][1].setPiece(.knight, .black)
+        cells[numberIndex7B][2].setPiece(.bishop, .black)
+        cells[numberIndex7B][3].setPiece(.queen, .black)
+        cells[numberIndex7B][4].setPiece(.king, .black)
+        cells[numberIndex7B][5].setPiece(.bishop, .black)
+        cells[numberIndex7B][6].setPiece(.knight, .black)
+        cells[numberIndex7B][7].setPiece(.rook, .black)
+        
+        cells[numberIndex6B][0].setPiece(.pown, .black)
+        cells[numberIndex6B][1].setPiece(.pown, .black)
+        cells[numberIndex6B][2].setPiece(.pown, .black)
+        cells[numberIndex6B][3].setPiece(.pown, .black)
+        cells[numberIndex6B][4].setPiece(.pown, .black)
+        cells[numberIndex6B][5].setPiece(.pown, .black)
+        cells[numberIndex6B][6].setPiece(.pown, .black)
+        cells[numberIndex6B][7].setPiece(.pown, .black)
+    }
+    
+    public func setBoardMode(mode: BoardMode) -> Void {
+        self.boardMode = mode
+    }
+    
+    public func setPlayerColor(color: PieceColor) -> Void {
+        self.playerColor = color
+    }
+    
+    public func rotateBoard() -> Void {
+        
+        self.selectedCell?.unselected()
+        self.selectedCell = nil
+        
+        for c in self.possibleCells {
+            c.unpossible()
         }
+        self.possibleCells.removeAll()
+        
+        for i in 0..<4 {
+            for j in 0..<8 {
+                let tmp = cells[self.boardNumbers.count - (i+1)][j]
+                cells[self.boardNumbers.count - (i+1)][j] = cells[i][j]
+                cells[i][j] = tmp
+            }
+        }
+
     }
 }

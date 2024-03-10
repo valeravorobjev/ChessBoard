@@ -1,17 +1,20 @@
 //
-//  File.swift
+//  Piece.swift
 //  
 //
-//  Created by Валерий Воробьев on 08.01.2024.
+//  Created by Valery Vorobjev on 08.01.2024.
 //
 
 import Foundation
 
-struct Piece: Identifiable {
-    var id: UUID = UUID()
-    var type: TPiece
-    var color: PColor
+/*
+ Chess piece
+ */
+struct Piece {
+    var type: PieceType    // Type of piece
+    var color: PieceColor  // Color
     
+    // Piece image
     var img: String {
         get {
             return "Pieces/\(color.toStr())\(type.rawValue)"

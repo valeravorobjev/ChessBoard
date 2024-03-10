@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension PColor {
+extension PieceColor {
     func toStr() -> String {
         switch self {
         case .black:
@@ -18,7 +18,7 @@ extension PColor {
         
     }
     
-    func toggle() ->PColor {
+    func toggle() ->PieceColor {
         switch self {
         case .black:
             return .white

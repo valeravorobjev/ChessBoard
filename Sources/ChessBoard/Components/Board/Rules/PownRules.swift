@@ -8,49 +8,73 @@
 import Foundation
 
 extension Board {
-    func pownPossibleMoves(_ location: CLocation, _ color: PColor)-> [CLocation] {
+    func pownPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
         
-        var possibles = [CLocation]()
+        var possibles = [LocationIndex]()
         
-        let numbers = self.playerColor == .white ? self.boardNumbers : self.boardNumbers.reversed()
+        let nidx = location.nidx
+        let sidx = location.sidx
         
-        let yindex = numbers.firstIndex(of: location.y)!
-        let xindex = self.boardChars.firstIndex(of: location.x)!
-        
-        var possible = CLocation(x: location.x, y: numbers[yindex + 1])
-        
-        if self.cells[possible.toStr()]?.piece == nil {
-            possibles.append(possible)
-        }
-        
-        if yindex == 1  {
-            let prev = possible
-            possible = CLocation(x: location.x, y: numbers[yindex + 2])
+        // Check whether the pawn can rotate one or two moves
+        if lessOrEqualsEnd(nidx) {
+            let possibleOne = LocationIndex(sidx: sidx, nidx: nextStepNumber(nidx, 1))
             
-            if self.cells[prev.toStr()]?.piece == nil && self.cells[possible.toStr()]?.piece == nil {
-                possibles.append(possible)
+            // if cell is null, pawn can be moved one step
+            if self.cells[possibleOne.nidx][possibleOne.sidx].piece == nil {
+                possibles.append(possibleOne)
+                
+                
+                if nidx == pownStartNIdx() {
+                    let possibleTwo = LocationIndex(sidx: possibleOne.sidx, nidx: nextStepNumber(possibleOne.nidx, 1))
+                    
+                    // if cell is null, pawn can be moved one step
+                    if self.cells[possibleTwo.nidx][possibleTwo.sidx].piece == nil {
+                        possibles.append(possibleTwo)
+                    }
+                }
+                
             }
         }
         
-        if xindex < 7 {
-            possible = CLocation(x: self.boardChars[xindex + 1], y: numbers[yindex + 1])
-            let piece = self.cells[possible.toStr()]?.piece
+        let nextPossibleUpStep = nextStepNumber(nidx, 1)
+        if lessOrEqualsEnd(nextPossibleUpStep) {
             
-            if piece != nil && piece?.color != color {
-                possibles.append(possible)
+            if sidx != endCharIndex {
+                let possibleUpRight = LocationIndex(sidx: nexStepChar(sidx, 1), nidx: nextPossibleUpStep)
+                let piece = self.cells[possibleUpRight.nidx][possibleUpRight.sidx].piece
+                
+                if piece != nil && piece?.color != color {
+                    possibles.append(possibleUpRight)
+                }
             }
-        }
-        
-        if xindex > 0 {
-            possible = CLocation(x: self.boardChars[xindex - 1], y: numbers[yindex + 1])
-            let piece = self.cells[possible.toStr()]?.piece
             
-            if piece != nil && piece?.color != color {
-                possibles.append(possible)
+            if sidx != beginCharIndex {
+                let possibleUpLeft = LocationIndex(sidx: backStepChar(sidx, 1), nidx: nextPossibleUpStep)
+                let piece = self.cells[possibleUpLeft.nidx][possibleUpLeft.sidx].piece
+                
+                if piece != nil && piece?.color != color {
+                    possibles.append(possibleUpLeft)
+                }
             }
+            
         }
+    
         
         return possibles
+        
+    }
+    
+    func pownStartNIdx() -> Int {
+        
+        if self.playerColor == .white {
+            if !self.rotated {
+                return 6
+            } else {
+                return 1
+            }
+        }
+        
+        return 1
         
     }
 }

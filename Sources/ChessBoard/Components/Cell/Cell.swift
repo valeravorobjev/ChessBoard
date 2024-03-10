@@ -8,11 +8,12 @@
 import Foundation
 import SwiftUI
 
+
 class Cell: Identifiable, ObservableObject {
     
     public var id: String {location.toStr()}
-    var location: CLocation = CLocation(x: "a", y: 1)
-    var locationShow: LShow = LShow(xshow: true, yshow: true)
+    var location: LocationCell = LocationCell(char: "a", number: 1)
+    var locationShow: LocationShow = LocationShow(charShow: true, numberShow: true)
     
     var locationdWhiteColor: Color = Color(red:240/255.0, green:217/255.0, blue:181/255.0)
     var locationBlackColor: Color = Color(red:148/255.0, green:111/255.0, blue:81/255.0)
@@ -22,29 +23,34 @@ class Cell: Identifiable, ObservableObject {
     
     @Published var selected: Bool = false
     @Published var possible: Bool = false
-    @Published var color: PColor
+    @Published var color: PieceColor
     @Published private(set) var piece: Piece?
     
-    init(color: PColor) {
+    init(color: PieceColor) {
         self.color = color
     }
     
-    init(color: PColor, scoord: String, show: LShow = LShow(xshow: false, yshow: false) ) {
-        
-        let x = scoord.first!
-        let y = Int(String(scoord.last!))!
-        
+    init(color: PieceColor, location: LocationCell, show: LocationShow = LocationShow(charShow: false, numberShow: false) ) {
         self.color = color
-        self.location = CLocation(x: x, y: y)
+        self.location = location
         self.locationShow = show
     }
     
-    func setPiece(_ type: TPiece, _ color: PColor) {
+    func setPiece(_ type: PieceType, _ color: PieceColor) {
         self.piece = Piece(type: type, color: color)
     }
+
     
     func removePiece() {
         self.piece = nil
+    }
+    
+    func unpossible() {
+        self.possible = false
+    }
+    
+    func unselected() {
+        self.selected = false
     }
     
     func xoffset(_ size: CGFloat)-> CGFloat {

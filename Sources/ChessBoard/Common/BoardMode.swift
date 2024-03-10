@@ -1,13 +1,18 @@
 //
-//  File.swift
+//  BoardMode.swift
 //  
 //
-//  Created by Валерий Воробьев on 08.01.2024.
+//  Created by Valery Vorobjev on 08.01.2024.
 //
 
 import Foundation
 
-enum BoardMode {
+/*
+ Gane mode.
+ game - regular game type.
+ analysis - full board access for analysis
+ */
+public enum BoardMode {
     case game
     case analisys
 }

@@ -1,8 +1,8 @@
 //
-//  SwiftUIView.swift
+//  PieceView.swift
 //
 //
-//  Created by Валерий Воробьев on 08.01.2024.
+//  Created by Valery Vorobjev on 08.01.2024.
 //
 
 import SwiftUI
@@ -21,6 +21,6 @@ struct PieceView: View {
 }
 
 #Preview {
-    PieceView(piece: Piece(type: .pown, color: .white), width: 49, height: 49)
+    PieceView(piece: Piece(type: .pown, color: .black), width: 49, height: 49)
         .frame(width: 200, height: 100)
 }

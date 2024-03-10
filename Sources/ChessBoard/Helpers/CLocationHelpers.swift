@@ -7,8 +7,8 @@
 
 import Foundation
 
-extension CLocation {
+extension LocationCell {
     func toStr() -> String {
-        return "\(self.x)\(self.y)"
+        return "\(self.char)\(self.number)"
     }
 }

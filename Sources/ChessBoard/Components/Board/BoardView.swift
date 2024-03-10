@@ -10,16 +10,21 @@ import SwiftUI
 public struct BoardView: View {
     @ObservedObject public var board: Board
     
+    public init() {
+        self.board = Board()
+    }
+    public init(board: Board) {
+        self.board = board
+    }
+    
     public var body: some View {
         GeometryReader { geometry in
             Grid(horizontalSpacing: 0, verticalSpacing: 0) {
-                ForEach(0..<8) { x in
+                ForEach(0..<board.boardNumbers.count, id: \.self) { i in
                     GridRow {
-                        ForEach(0..<8) { y in
-                            let coord = board.cellCoord(x, y)
-                            let cell = board.cells[coord]!
-                            CellView(cell: cell, onSelected: {
-                                board.selectCell(cell: cell)
+                        ForEach(0..<board.boardChars.count, id: \.self) { j in
+                            CellView(cell: board.cells[i][j], onSelected: {
+                                board.selectCell(cell: board.cells[i][j])
                             })
                         }
                     }
@@ -30,5 +35,5 @@ public struct BoardView: View {
 }
 
 #Preview {
-    BoardView(board: Board())
+    BoardView(board: Board()).padding(100)
 }

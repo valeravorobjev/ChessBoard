@@ -8,92 +8,90 @@
 import Foundation
 
 extension Board {
-    func queenPossibleMoves(_ location: CLocation, _ color: PColor)-> [CLocation] {
-        var possibleMoves = [CLocation]()
+    func queenPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
+        var possibleMoves = [LocationIndex]()
         
-        let numbers = self.playerColor == .white ? self.boardNumbers : self.boardNumbers.reversed()
-        
-        let yindex = numbers.firstIndex(of: location.y)!
-        let xindex = self.boardChars.firstIndex(of: location.x)!
+        let nidx = location.nidx
+        let sidx = location.sidx
         
         
-        var possibleYIndex = yindex
-        var possibleXIndex = xindex
-        while possibleYIndex > -1 {
-            possibleYIndex -= 1
-            possibleXIndex -= 1
+        var possibleNumberIndex = nidx
+        var possibleCharIndex = sidx
+        while possibleNumberIndex > -1 {
+            possibleNumberIndex -= 1
+            possibleCharIndex -= 1
             
-            if !possibleMove(numbers: numbers, possibleMoves: &possibleMoves, color, possibleXIndex, possibleYIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
                 break
             }
                 
         }
         
-        possibleYIndex = yindex
-        possibleXIndex = xindex
-        while possibleYIndex < 8 {
-            possibleYIndex += 1
-            possibleXIndex += 1
+        possibleNumberIndex = nidx
+        possibleCharIndex = sidx
+        while possibleNumberIndex < 8 {
+            possibleNumberIndex += 1
+            possibleCharIndex += 1
             
-            if !possibleMove(numbers: numbers, possibleMoves: &possibleMoves, color, possibleXIndex, possibleYIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
         
-        possibleYIndex = yindex
-        possibleXIndex = xindex
-        while possibleXIndex < 8 {
-            possibleYIndex -= 1
-            possibleXIndex += 1
+        possibleNumberIndex = nidx
+        possibleCharIndex = sidx
+        while possibleCharIndex < 8 {
+            possibleNumberIndex -= 1
+            possibleCharIndex += 1
             
-            if !possibleMove(numbers: numbers, possibleMoves: &possibleMoves, color, possibleXIndex, possibleYIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
         
-        possibleYIndex = yindex
-        possibleXIndex = xindex
-        while possibleXIndex > -1 {
-            possibleYIndex += 1
-            possibleXIndex -= 1
+        possibleNumberIndex = nidx
+        possibleCharIndex = sidx
+        while possibleCharIndex > -1 {
+            possibleNumberIndex += 1
+            possibleCharIndex -= 1
             
-            if !possibleMove(numbers: numbers, possibleMoves: &possibleMoves, color, possibleXIndex, possibleYIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
         
-        possibleYIndex = yindex
-        while possibleYIndex < 8 {
-            possibleYIndex += 1
+        possibleNumberIndex = nidx
+        while possibleNumberIndex < 8 {
+            possibleNumberIndex += 1
             
-            if !possibleMove(numbers: numbers, possibleMoves: &possibleMoves, color, xindex, possibleYIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, sidx, possibleNumberIndex) {
                 break
             }
         }
         
-        possibleYIndex = yindex
-        while possibleYIndex > -1 {
-            possibleYIndex -= 1
+        possibleNumberIndex = nidx
+        while possibleNumberIndex > -1 {
+            possibleNumberIndex -= 1
             
-            if !possibleMove(numbers: numbers, possibleMoves: &possibleMoves, color, xindex, possibleYIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, sidx, possibleNumberIndex) {
                 break
             }
         }
         
-        possibleXIndex = xindex
-        while possibleXIndex > -1 {
-            possibleXIndex -= 1
+        possibleCharIndex = sidx
+        while possibleCharIndex > -1 {
+            possibleCharIndex -= 1
             
-            if !possibleMove(numbers: numbers, possibleMoves: &possibleMoves, color, possibleXIndex, yindex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, nidx) {
                 break
             }
         }
         
-        possibleXIndex = xindex
-        while possibleXIndex < 8 {
-            possibleXIndex += 1
+        possibleCharIndex = sidx
+        while possibleCharIndex < 8 {
+            possibleCharIndex += 1
             
-            if !possibleMove(numbers: numbers, possibleMoves: &possibleMoves, color, possibleXIndex, yindex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, nidx) {
                 break
             }
         }

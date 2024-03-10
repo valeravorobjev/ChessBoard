@@ -27,9 +27,9 @@ struct CellView: View {
                         .opacity(0.8)
                 }
                 
-                if cell.locationShow.xshow {
-                    Text(String(cell.location.x))
-                        .foregroundColor(cell.color == .black ? cell.locationdWhiteColor : cell.locationdWhiteColor)
+                if cell.locationShow.charShow {
+                    Text(String(cell.location.char))
+                        .foregroundColor(cell.color == .black ? cell.locationdWhiteColor : cell.locationBlackColor)
                         .font(.system(size: (geometry.size.width + geometry.size.height) * 0.10))
                         .offset(
                             x: cell.xoffset(geometry.size.width),
@@ -37,8 +37,8 @@ struct CellView: View {
                         )
                 }
                 
-                if cell.locationShow.yshow {
-                    Text(String(cell.location.y))
+                if cell.locationShow.numberShow {
+                    Text(String(cell.location.number))
                         .foregroundColor(cell.color == .black ? cell.locationdWhiteColor : cell.locationBlackColor)
                         .font(.system(size: (geometry.size.width + geometry.size.height) * 0.10))
                         .offset(
@@ -64,6 +64,6 @@ struct CellView: View {
 }
 
 #Preview {
-    CellView(cell: Cell(color: .black))
+    CellView(cell: Cell(color: .white))
         .frame(width: 200, height: 300)
 }
