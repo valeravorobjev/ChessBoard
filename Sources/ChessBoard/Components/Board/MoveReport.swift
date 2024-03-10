@@ -8,7 +8,7 @@
 import Foundation
 
 /// Piece move structure whth data about move action
-struct MoveReport {
+public struct MoveReport {
     var oldLoc: CLocation       // Old piece coordinate
     var newLoc: CLocation       // New piece coordinate after move
     var ownPiece: Piece         // The piece that move

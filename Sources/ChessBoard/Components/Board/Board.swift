@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-class Board: ObservableObject {
+public class Board: ObservableObject {
     private var selectedCell: Cell? = nil
     private var possibleCells: [Cell] = []
     
-    let boardNumbers: [Int] = [1,2,3,4,5,6,7,8]
-    let boardChars: [Character] = ["a", "b", "c", "d", "e", "f", "g", "h"]
-    var boardMode: BoardMode = .game
+    internal let boardNumbers: [Int] = [1,2,3,4,5,6,7,8]
+    internal let boardChars: [Character] = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    internal var boardMode: BoardMode = .game
     
     @Published var playerColor: PColor = .black
     @Published var cells: Dictionary<String, Cell> = Dictionary<String, Cell>()
@@ -30,56 +30,6 @@ class Board: ObservableObject {
                 cells[scoord] = cell
             }
         }
-    
-    }
-    
-    func selectCell(cell: Cell) -> Void {
-        
-        if !possibleCells.isEmpty {
-            let pc = possibleCells.first(where: {$0.id == cell.id})
-            
-            for possibleCell in self.possibleCells {
-                possibleCell.possible.toggle()
-            }
-            
-            self.possibleCells.removeAll()
-            
-            if pc != nil && selectedCell?.piece != nil {
-                let cmove = self.move(from: selectedCell!, to: cell)
-                
-            }
-            
-        }
-        
-        if cell.piece == nil || (self.boardMode != .analisys && cell.piece?.color != self.playerColor) {
-            selectedCell?.selected = false
-            selectedCell = nil
-            return
-        }
-        
-        if cell.piece != nil && cell.id == selectedCell?.id {
-            selectedCell!.selected = false
-            selectedCell = nil
-            return
-        }
-        
-        selectedCell?.selected = false
-        cell.selected.toggle()
-        selectedCell = cell
-        
-        let possibleCoords = self.possibleMoves(by: selectedCell!.piece!.type, location: selectedCell!.location, color: selectedCell!.piece!.color)
-        
-        for possibleCoord in possibleCoords {
-            let possibleCell = self.cells[possibleCoord.toStr()]!
-            possibleCells.append(possibleCell)
-            
-            possibleCell.possible.toggle()
-        }
-    }
-    
-    func cellCoord(_ i: Int, _ j: Int) -> String {
-        let numbers = self.playerColor == .white ? boardNumbers.reversed() : boardNumbers
-        return "\(boardChars[j])\(numbers[i])"
     }
     
     private func cellCoordShow(_ x: Int, _ y: Int, _ all: Bool = false) -> LShow {
@@ -111,7 +61,56 @@ class Board: ObservableObject {
         return color
     }
     
-    func initBoard() {
+    internal func cellCoord(_ i: Int, _ j: Int) -> String {
+        let numbers = self.playerColor == .white ? boardNumbers.reversed() : boardNumbers
+        return "\(boardChars[j])\(numbers[i])"
+    }
+    
+    internal func selectCell(cell: Cell) -> Void {
+        
+        if !possibleCells.isEmpty {
+            let pc = possibleCells.first(where: {$0.id == cell.id})
+            
+            for possibleCell in self.possibleCells {
+                possibleCell.possible.toggle()
+            }
+            
+            self.possibleCells.removeAll()
+            
+            if pc != nil && selectedCell?.piece != nil {
+                _ = self.move(from: selectedCell!, to: cell)
+                
+            }
+            
+        }
+        
+        if cell.piece == nil || (self.boardMode != .analisys && cell.piece?.color != self.playerColor) {
+            selectedCell?.selected = false
+            selectedCell = nil
+            return
+        }
+        
+        if cell.piece != nil && cell.id == selectedCell?.id {
+            selectedCell!.selected = false
+            selectedCell = nil
+            return
+        }
+        
+        selectedCell?.selected = false
+        cell.selected.toggle()
+        selectedCell = cell
+        
+        let possibleCoords = self.possibleMoves(by: selectedCell!.piece!.type, location: selectedCell!.location, color: selectedCell!.piece!.color)
+        
+        for possibleCoord in possibleCoords {
+            let possibleCell = self.cells[possibleCoord.toStr()]!
+            possibleCells.append(possibleCell)
+            
+            possibleCell.possible.toggle()
+        }
+    }
+    
+    public func initBoard() {
         cells["a2"]?.setPiece(.pown, .white)
         cells["b2"]?.setPiece(.pown, .white)
         cells["c2"]?.setPiece(.pown, .white)
@@ -149,7 +148,7 @@ class Board: ObservableObject {
         cells["h8"]?.setPiece(.rook, .black)
     }
     
-    func initBoard(pcoords: [PCoord]) {
+    public func initBoard(pcoords: [PCoord]) {
         for pcoord in pcoords {
             cells[pcoord.scoord]?.setPiece(pcoord.type, pcoord.color)
         }

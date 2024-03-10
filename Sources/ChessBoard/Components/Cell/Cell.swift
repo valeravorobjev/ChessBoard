@@ -10,7 +10,7 @@ import SwiftUI
 
 class Cell: Identifiable, ObservableObject {
     
-    var id: String {location.toStr()}
+    public var id: String {location.toStr()}
     var location: CLocation = CLocation(x: "a", y: 1)
     var locationShow: LShow = LShow(xshow: true, yshow: true)
     

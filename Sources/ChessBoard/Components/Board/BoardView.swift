@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct BoardView: View {
+public struct BoardView: View {
     @ObservedObject var board: Board
     
-    var body: some View {
+    public var body: some View {
         GeometryReader { geometry in
             Grid(horizontalSpacing: 0, verticalSpacing: 0) {
                 ForEach(0..<8) { x in

@@ -8,7 +8,7 @@
 import Foundation
 
 // Piece's coord
-struct PCoord {
+public struct PCoord {
     var scoord: String
     var type: TPiece
     var color: PColor

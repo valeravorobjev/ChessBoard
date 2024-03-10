@@ -8,7 +8,7 @@
 import Foundation
 
 // Type of piece
-enum TPiece: String {
+public enum TPiece: String {
     case pown   = "P"
     case rook   = "R"
     case knight = "N"

@@ -9,7 +9,7 @@ import Foundation
 
 extension Board {
     
-    public func possibleMoves(by: TPiece, location: CLocation, color: PColor) -> [CLocation] {
+    func possibleMoves(by: TPiece, location: CLocation, color: PColor) -> [CLocation] {
         
         var possibles: [CLocation] = []
         
