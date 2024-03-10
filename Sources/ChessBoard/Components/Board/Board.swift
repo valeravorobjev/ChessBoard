@@ -18,7 +18,7 @@ public class Board: ObservableObject {
     @Published var playerColor: PColor = .black
     @Published var cells: Dictionary<String, Cell> = Dictionary<String, Cell>()
     
-    init() {
+    public init() {
         for i in 0..<8 {
             for j in 0..<8{
                 let color = self.cellColor(i, j)
