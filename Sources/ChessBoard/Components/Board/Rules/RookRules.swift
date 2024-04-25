@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Board {
+extension BoardCommon {
     func rookPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
         var possibleMoves = [LocationIndex]()
         

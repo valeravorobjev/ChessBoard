@@ -8,12 +8,12 @@
 import SwiftUI
 
 public struct BoardView: View {
-    @ObservedObject public var board: Board
+    @ObservedObject public var board: BoardDefault
     
     public init() {
-        self.board = Board()
+        self.board = BoardDefault()
     }
-    public init(board: Board) {
+    public init(board: BoardDefault) {
         self.board = board
     }
     
@@ -24,7 +24,7 @@ public struct BoardView: View {
                     GridRow {
                         ForEach(0..<board.boardChars.count, id: \.self) { j in
                             CellView(cell: board.cells[i][j], onSelected: {
-                                board.selectCell(cell: board.cells[i][j])
+                                board.processing(cell: board.cells[i][j])
                             })
                         }
                     }
@@ -35,5 +35,5 @@ public struct BoardView: View {
 }
 
 #Preview {
-    BoardView(board: Board()).padding(100)
+    BoardView(board: BoardDefault()).padding(100)
 }

@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-class Cell: Identifiable, ObservableObject {
+public class Cell: Identifiable, ObservableObject {
     
     public var id: String {location.toStr()}
     var location: LocationCell = LocationCell(char: "a", number: 1)

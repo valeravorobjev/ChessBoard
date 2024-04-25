@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Board {
+extension BoardCommon {
     
     func possibleMoves(by: PieceType, location: LocationIndex, color: PieceColor) -> [LocationIndex] {
         

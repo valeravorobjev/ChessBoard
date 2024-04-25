@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+
+public enum BoardErrors: Error {
+    case invalidCellCoordinates(coordStr: String, msg: String)
+}

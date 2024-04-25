@@ -7,16 +7,27 @@
 
 import Foundation
 
-extension BoardMoveDefault {
+extension BoardDefault: BoardMove {
     
-    func move(from: Cell, to: Cell) -> MoveReport {
-        let mv = MoveReport(oldLoc: from.location, newLoc: to.location, ownPiece: from.piece!, targetPiece: to.piece)
+    func move(from: LocationCell, to: LocationCell) -> MoveReport {
         
-        let tmp = from.piece!
+        let fromCell = getCellByLocationCell(from)
+        let toCell = getCellByLocationCell(to)
         
-        from.removePiece()
-        to.setPiece(tmp.type, tmp.color)
+        let mv = MoveReport(oldLoc: from, newLoc: to, ownPiece: fromCell.piece!, targetPiece: toCell.piece)
+        
+        let tmp = fromCell.piece!
+        
+        fromCell.removePiece()
+        toCell.setPiece(tmp.type, tmp.color)
         
         return mv
+    }
+    
+    private func getCellByLocationCell(_ lc: LocationCell) -> Cell {
+        
+        let li = convertLCtoLI(lc)
+        
+        return cells[li.nidx][li.sidx]
     }
 }

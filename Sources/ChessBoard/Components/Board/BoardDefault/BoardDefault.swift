@@ -7,24 +7,24 @@
 
 import SwiftUI
 
-public class Board: ObservableObject {
-    internal private(set) var selectedCell: Cell? = nil
-    internal private(set) var possibleCells: [Cell] = []
-    internal private(set) var selectedIndex: LocationIndex? = nil
+public class BoardDefault: BoardCommon {
+    internal var selectedCell: Cell? = nil
+    internal var possibleCells: [Cell] = []
+    internal var selectedIndex: LocationIndex? = nil
     
-    internal var rotated: Bool = false
-    internal var boardNumbers: [Int] = [8,7,6,5,4,3,2,1]
-    internal var boardChars: [Character] = ["a", "b", "c", "d", "e", "f", "g", "h"]
-    internal private(set) var boardMode: BoardMode = .game
-    internal private(set) var playerColor: PieceColor = .white
-    internal private(set) var beginNumberIndex = 7
-    internal private(set) var endNumberIndex = 0
-    internal private(set) var beginCharIndex = 0
-    internal private(set) var endCharIndex = 7
+    public var rotated: Bool = false
+    public var boardNumbers: [Int] = [8,7,6,5,4,3,2,1]
+    public var boardChars: [Character] = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    public private(set) var boardMode: BoardMode = .game
+    public private(set) var playerColor: PieceColor = .white
+    public private(set) var beginNumberIndex = 7
+    public private(set) var endNumberIndex = 0
+    public private(set) var beginCharIndex = 0
+    public private(set) var endCharIndex = 7
     
-    @Published var cells: [[Cell]] = []
+    @Published public var cells: [[Cell]] = []
     
-    public init(boardMode: BoardMode = .game, playerColor: PieceColor = .white) {
+    required public init(boardMode: BoardMode = .game, playerColor: PieceColor = .white) {
         
         if playerColor == .black && !rotated {
             boardNumbers.reverse()
@@ -39,7 +39,7 @@ public class Board: ObservableObject {
             for charIndex in 0..<8 {
                 let color = self.cellColor(charIndex, numberIndex)
                 let location = self.cellCoord(charIndex, numberIndex)
-                let show = self.cellCoordShow(charIndex, numberIndex)
+                let show = self.showCellCoords(charIndex, numberIndex)
                 
                 let cell = Cell(color: color, location: location, show: show)
                 rowCells.append(cell)
@@ -49,7 +49,7 @@ public class Board: ObservableObject {
         
     }
     
-    private func cellCoordShow(_ charIndex: Int, _ numberIndex: Int, _ all: Bool = false) -> LocationShow {
+    internal func showCellCoords(_ charIndex: Int, _ numberIndex: Int, _ all: Bool = false) -> LocationShow {
         var charShow = false
         var numberShow = false
         
@@ -69,7 +69,7 @@ public class Board: ObservableObject {
         return LocationShow(charShow: charShow, numberShow: numberShow)
     }
     
-    private func cellColor(_ charIndex: Int, _ numberIndex: Int) -> PieceColor {
+    internal func cellColor(_ charIndex: Int, _ numberIndex: Int) -> PieceColor {
         var color: PieceColor = self.playerColor
         
         if (charIndex + numberIndex) % 2 != 0 {
@@ -81,53 +81,6 @@ public class Board: ObservableObject {
     
     internal func cellCoord(_ charIndex: Int, _ numberIndex: Int) -> LocationCell {
         return LocationCell(char: boardChars[charIndex], number: boardNumbers[numberIndex])
-    }
-    
-    internal func selectCell(cell: Cell) -> Void {
-        
-        if !possibleCells.isEmpty {
-            let pc = possibleCells.first(where: {$0.id == cell.id})
-            
-            for possibleCell in self.possibleCells {
-                possibleCell.unpossible()
-            }
-            
-            self.possibleCells.removeAll()
-            
-            if pc != nil && selectedCell?.piece != nil {
-                _ = self.move(from: selectedCell!, to: cell)
-                
-            }
-            
-        }
-        
-        if cell.piece == nil || (self.boardMode != .analisys && cell.piece?.color != self.playerColor) {
-            selectedCell?.selected = false
-            selectedCell = nil
-            selectedIndex = nil
-            return
-        }
-        
-        if cell.piece != nil && cell.id == selectedCell?.id {
-            selectedCell!.selected = false
-            selectedCell = nil
-            selectedIndex = nil
-            return
-        }
-        
-        selectedCell?.selected = false
-        cell.selected.toggle()
-        selectedCell = cell
-        selectedIndex = LocationIndex(sidx: boardChars.firstIndex(of: cell.location.char)!, nidx: boardNumbers.firstIndex(of: cell.location.number)!)
-        
-        let possibleIndexes = self.possibleMoves(by: selectedCell!.piece!.type, location: selectedIndex!, color: selectedCell!.piece!.color)
-        
-        for possibleIndex in possibleIndexes {
-            let possibleCell = self.cells[possibleIndex.nidx][possibleIndex.sidx]
-            possibleCells.append(possibleCell)
-            
-            possibleCell.possible.toggle()
-        }
     }
     
     public func clearBoard() -> Void {

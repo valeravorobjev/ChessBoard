@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Board {
+extension BoardCommon {
     func knightPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
         var possibleMoves = [LocationIndex]()
         

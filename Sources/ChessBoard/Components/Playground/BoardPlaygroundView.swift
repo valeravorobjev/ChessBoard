@@ -9,7 +9,7 @@ import SwiftUI
 
 struct BoardPlaygroundView: View {
     
-    let board = Board()
+    let board = BoardDefault()
     
     var body: some View {
         VStack {

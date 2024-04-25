@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol BoardMove {
+    func move(from: LocationCell, to: LocationCell) -> MoveReport   // Move piece
+}

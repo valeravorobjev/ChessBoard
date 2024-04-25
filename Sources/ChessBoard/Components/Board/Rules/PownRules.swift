@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Board {
+extension BoardCommon {
     func pownPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
         
         var possibles = [LocationIndex]()
