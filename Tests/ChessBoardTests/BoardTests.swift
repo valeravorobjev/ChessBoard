@@ -1,15 +1,14 @@
 //
 //  BoardTests.swift
-//  
+//
 //
 //  Created by Валерий Воробьев on 11.03.2024.
 //
 
-import XCTest
 @testable import ChessBoard
+import XCTest
 
 final class BoardTests: XCTestCase {
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -27,10 +26,28 @@ final class BoardTests: XCTestCase {
         let board = BoardDefault(boardMode: .game, playerColor: .white)
         board.initBoard()
         
-        board.processing(board.getCell(LocationCell(char: "c", number: 2)))
-        board.processing(board.getCell(LocationCell(char: "c", number: 4)))
+        board.processing(board.getCell(LocationCell("c", 2)))
+        board.processing(board.getCell(LocationCell("c", 4)))
+        board.processing(board.getCell(LocationCell("c", 4)))
+        board.processing(board.getCell(LocationCell("c", 5)))
+        board.processing(board.getCell(LocationCell("c", 5)))
+        board.processing(board.getCell(LocationCell("c", 6)))
+        board.processing(board.getCell(LocationCell("c", 6)))
+        board.processing(board.getCell(LocationCell("b", 7)))
+        board.processing(board.getCell(LocationCell("b", 7)))
     }
     
+    func testPownPossibleMoves() throws {
+        let board = BoardDefault(boardMode: .game, playerColor: .white)
+        board.initBoard()
+        
+        let lc = LocationCell("c", 6)
+        let li = board.convertLCtoLI(lc)
+        
+        let pms = board.pownPossibleMoves(li)
+        
+        assert(pms.count == 2, "pown possible moves must have 2 cels")
+    }
     
     func testMovePown() throws {
         let board = BoardDefault(boardMode: .game, playerColor: .white)
@@ -47,8 +64,6 @@ final class BoardTests: XCTestCase {
         assert(board.possibleCells[0].location.char == "c" && board.possibleCells[0].location.number == 3, "possible cell must be c3")
         assert(board.possibleCells[1].location.char == "c" && board.possibleCells[1].location.number == 4, "possible cell must be c4")
         
-        
-        
         board.processing(board.cells[4][2])
         assert(board.selectedCell?.location.toStr() == "c4", "pown must be on c4 cell")
         
@@ -63,8 +78,6 @@ final class BoardTests: XCTestCase {
         
         board.processing(board.cells[0][2])
         assert(board.selectedCell?.location.toStr() == "c8", "pown must be on c8 cell")
-        
-        
     }
 
     func testPerformanceExample() throws {
@@ -73,5 +86,4 @@ final class BoardTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
-
 }

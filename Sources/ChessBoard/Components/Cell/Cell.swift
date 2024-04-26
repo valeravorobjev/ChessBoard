@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Валерий Воробьев on 08.01.2024.
 //
@@ -8,18 +8,16 @@
 import Foundation
 import SwiftUI
 
-
 public class Cell: Identifiable, ObservableObject {
+    public var id: String { self.location.toStr() }
+    var location: LocationCell = .init("a", 1)
+    var locationShow: LocationShow = .init(charShow: true, numberShow: true)
     
-    public var id: String {location.toStr()}
-    var location: LocationCell = LocationCell(char: "a", number: 1)
-    var locationShow: LocationShow = LocationShow(charShow: true, numberShow: true)
+    var locationdWhiteColor: Color = .init(red: 240/255.0, green: 217/255.0, blue: 181/255.0)
+    var locationBlackColor: Color = .init(red: 148/255.0, green: 111/255.0, blue: 81/255.0)
     
-    var locationdWhiteColor: Color = Color(red:240/255.0, green:217/255.0, blue:181/255.0)
-    var locationBlackColor: Color = Color(red:148/255.0, green:111/255.0, blue:81/255.0)
-    
-    var cellBlackColor: Color = Color(red: 181/255.0, green: 136/255.0, blue: 99/255.0)
-    var cellWhiteColor: Color = Color(red: 240/255.0, green: 217/255.0, blue: 181/255.0 )
+    var cellBlackColor: Color = .init(red: 181/255.0, green: 136/255.0, blue: 99/255.0)
+    var cellWhiteColor: Color = .init(red: 240/255.0, green: 217/255.0, blue: 181/255.0)
     
     @Published var selected: Bool = false
     @Published var possible: Bool = false
@@ -30,7 +28,7 @@ public class Cell: Identifiable, ObservableObject {
         self.color = color
     }
     
-    init(color: PieceColor, location: LocationCell, show: LocationShow = LocationShow(charShow: false, numberShow: false) ) {
+    init(color: PieceColor, location: LocationCell, show: LocationShow = LocationShow(charShow: false, numberShow: false)) {
         self.color = color
         self.location = location
         self.locationShow = show
@@ -40,7 +38,6 @@ public class Cell: Identifiable, ObservableObject {
         self.piece = Piece(type: type, color: color)
     }
 
-    
     func removePiece() {
         self.piece = nil
     }
@@ -53,11 +50,11 @@ public class Cell: Identifiable, ObservableObject {
         self.selected = false
     }
     
-    func xoffset(_ size: CGFloat)-> CGFloat {
-        return (size / 2 - (size * 0.10)) * -1
+    func xoffset(_ size: CGFloat) -> CGFloat {
+        return (size/2 - (size * 0.10)) * -1
     }
     
-    func yoffset(_ size: CGFloat)-> CGFloat {
-        return size / 2 - (size * 0.10)
+    func yoffset(_ size: CGFloat) -> CGFloat {
+        return size/2 - (size * 0.10)
     }
 }

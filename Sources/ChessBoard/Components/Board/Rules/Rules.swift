@@ -8,32 +8,28 @@
 import Foundation
 
 extension BoardCommon {
-    
-    func possibleMoves(by: PieceType, location: LocationIndex, color: PieceColor) -> [LocationIndex] {
-        
+    func possibleMoves(by: PieceType, location: LocationIndex) -> [LocationIndex] {
         var possibles: [LocationIndex] = []
         
         switch by {
         case .pown:
-            possibles = self.pownPossibleMoves(location, color)
+            possibles = self.pownPossibleMoves(location)
         case .rook:
-            possibles = self.rookPossibleMoves(location, color)
+            possibles = self.rookPossibleMoves(location)
         case .knight:
-            possibles = self.knightPossibleMoves(location, color)
+            possibles = self.knightPossibleMoves(location)
         case .bishop:
-            possibles = self.bishopPossibleMoves(location, color)
+            possibles = self.bishopPossibleMoves(location)
         case .queen:
-            possibles = self.queenPossibleMoves(location, color)
+            possibles = self.queenPossibleMoves(location)
         case .king:
-            possibles = self.kingPossibleMoves(location, color)
-            
+            possibles = self.kingPossibleMoves(location)
         }
         
         return possibles
     }
     
-    func possibleMove(numbers: [Int], possibleMoves: inout [LocationIndex], _ color: PieceColor , _ sidx: Int, _ nidx: Int) -> Bool {
-        
+    func possibleMove(numbers: [Int], possibleMoves: inout [LocationIndex], _ color: PieceColor, _ sidx: Int, _ nidx: Int) -> Bool {
         if sidx > endCharIndex || sidx < beginCharIndex || nidx > endNumberIndex || nidx < beginNumberIndex {
             return false
         }
@@ -44,15 +40,13 @@ extension BoardCommon {
         if cell.piece == nil {
             possibleMoves.append(possible)
             return true
-        }
-        else if cell.piece != nil && cell.piece?.color != color {
+        } else if cell.piece != nil && cell.piece?.color != color {
             possibleMoves.append(possible)
             return false
         }
         
         return false
     }
-    
     
     func nextStepNumber(_ nidx: Int, _ steps: Int) -> Int {
         if self.playerColor == .white && !rotated {
@@ -64,30 +58,25 @@ extension BoardCommon {
     
     func endNIndex() -> Int {
         if self.playerColor == .white && !rotated {
-            return self.boardNumbers.last!
+            return self.boardNumbers.count - 1
         }
         
-        return self.boardNumbers.first!
+        return 0
     }
     
-    func lessOrEqualsEnd(_ nidx: Int) -> Bool {
-        
+    func lessNumberEndIndex(_ nidx: Int) -> Bool {
         if self.playerColor == .white {
-            
-            if !rotated && nidx >= self.boardNumbers.last! {
+            if !rotated && nidx > 0 {
                 return true
-            } else if rotated && nidx <= self.boardNumbers.last! {
+            } else if rotated && nidx < self.boardNumbers.count - 1 {
+                return true
+            } else {
                 return false
             }
-                
-            
         }
         
-        if self.playerColor == .black {
-            
-        }
+        if self.playerColor == .black {}
     
-        
         return false
     }
     
@@ -98,5 +87,4 @@ extension BoardCommon {
     func backStepChar(_ sidx: Int, _ steps: Int) -> Int {
         return sidx - steps
     }
-    
 }

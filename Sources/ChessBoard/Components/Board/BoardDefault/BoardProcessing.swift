@@ -25,7 +25,12 @@ extension BoardDefault {
             return
         }
         
-        if cell.piece != nil && cell.piece?.color != playerColor {
+        if selectedCell != nil && selectedCell?.id == cell.id {
+            self.resetSelected()
+            return
+        }
+        
+        if cell.piece != nil && cell.piece?.color != playerColor && !cell.possible {
             self.resetSelected()
             return
         }
@@ -37,18 +42,18 @@ extension BoardDefault {
         
         if !possibleCells.isEmpty {
             let pc = possibleCells.first(where: { $0.id == cell.id })
-            
+
             if pc != nil {
                 for possibleCell in self.possibleCells {
                     possibleCell.unpossible()
                 }
-                    
+
                 self.possibleCells.removeAll()
-                    
+
                 if pc != nil, selectedCell?.piece != nil {
                     _ = self.move(from: selectedCell!.location, to: cell.location)
                 }
-                
+
                 self.resetSelected()
                 return
             }
@@ -63,20 +68,19 @@ extension BoardDefault {
             nidx: boardNumbers.firstIndex(of: cell.location.number)!
         )
         
-        let possibleIndexes = self.possibleMoves(by: selectedCell!.piece!.type, location: selectedIndex!, color: selectedCell!.piece!.color)
+        let possibleIndexes = self.possibleMoves(by: selectedCell!.piece!.type, location: selectedIndex!)
         
         for possibleIndex in possibleIndexes {
             let possibleCell = self.cells[possibleIndex.nidx][possibleIndex.sidx]
-            possibleCells.append(possibleCell)
-            
             possibleCell.possible.toggle()
+            possibleCells.append(possibleCell)
         }
     }
     
     func processingAnalysis() {}
     
     func resetSelected() {
-        selectedCell?.selected.toggle()
+        selectedCell?.selected = false
         selectedCell = nil
         selectedIndex = nil
         

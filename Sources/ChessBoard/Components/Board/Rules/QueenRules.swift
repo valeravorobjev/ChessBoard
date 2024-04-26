@@ -8,12 +8,11 @@
 import Foundation
 
 extension BoardCommon {
-    func queenPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
+    func queenPossibleMoves(_ location: LocationIndex) -> [LocationIndex] {
         var possibleMoves = [LocationIndex]()
         
         let nidx = location.nidx
         let sidx = location.sidx
-        
         
         var possibleNumberIndex = nidx
         var possibleCharIndex = sidx
@@ -21,10 +20,9 @@ extension BoardCommon {
             possibleNumberIndex -= 1
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
                 break
             }
-                
         }
         
         possibleNumberIndex = nidx
@@ -33,7 +31,7 @@ extension BoardCommon {
             possibleNumberIndex += 1
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -44,7 +42,7 @@ extension BoardCommon {
             possibleNumberIndex -= 1
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -55,7 +53,7 @@ extension BoardCommon {
             possibleNumberIndex += 1
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -64,7 +62,7 @@ extension BoardCommon {
         while possibleNumberIndex < 8 {
             possibleNumberIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, sidx, possibleNumberIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, sidx, possibleNumberIndex) {
                 break
             }
         }
@@ -73,7 +71,7 @@ extension BoardCommon {
         while possibleNumberIndex > -1 {
             possibleNumberIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, sidx, possibleNumberIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, sidx, possibleNumberIndex) {
                 break
             }
         }
@@ -82,7 +80,7 @@ extension BoardCommon {
         while possibleCharIndex > -1 {
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, nidx) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, nidx) {
                 break
             }
         }
@@ -91,11 +89,10 @@ extension BoardCommon {
         while possibleCharIndex < 8 {
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, nidx) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, nidx) {
                 break
             }
         }
-        
         
         return possibleMoves
     }

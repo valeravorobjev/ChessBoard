@@ -1,6 +1,6 @@
 //
 //  SwiftUIView.swift
-//  
+//
 //
 //  Created by Валерий Воробьев on 08.01.2024.
 //
@@ -10,13 +10,12 @@ import SwiftUI
 struct CellView: View {
     @ObservedObject var cell: Cell
     
-    var onSelected: ()-> Void = {}
+    var onSelected: () -> Void = {}
     
-    let selectedCellColor = Color(red:106/255.0, green:111/255.0, blue:64/255.0)
-    let possibleCellColor = Color(red:106/255.0, green:111/255.0, blue:64/255.0)
+    let selectedCellColor = Color(red: 106/255.0, green: 111/255.0, blue: 64/255.0)
+    let possibleCellColor = Color(red: 106/255.0, green: 111/255.0, blue: 64/255.0)
     
     var body: some View {
-        
         GeometryReader { geometry in
             ZStack {
                 Rectangle().fill(cell.color == .black ? cell.cellBlackColor : cell.cellWhiteColor)
@@ -54,7 +53,7 @@ struct CellView: View {
                 if cell.possible {
                     Ellipse().fill(possibleCellColor)
                         .opacity(0.8)
-                        .frame(width: geometry.size.width / 3, height: geometry.size.height / 3)
+                        .frame(width: geometry.size.width/3, height: geometry.size.height/3)
                 }
             }.onTapGesture {
                 onSelected()

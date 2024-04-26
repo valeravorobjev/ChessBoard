@@ -8,7 +8,7 @@
 import Foundation
 
 extension BoardCommon {
-    func bishopPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
+    func bishopPossibleMoves(_ location: LocationIndex) -> [LocationIndex] {
         var possibleMoves = [LocationIndex]()
         
         let sidx = location.sidx
@@ -20,10 +20,9 @@ extension BoardCommon {
             possibleNumberIndex -= 1
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
                 break
             }
-            
         }
         
         possibleNumberIndex = nidx
@@ -32,7 +31,7 @@ extension BoardCommon {
             possibleNumberIndex += 1
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -43,7 +42,7 @@ extension BoardCommon {
             possibleNumberIndex -= 1
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -54,11 +53,10 @@ extension BoardCommon {
             possibleNumberIndex += 1
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
-        
         
         return possibleMoves
     }
