@@ -17,10 +17,6 @@ public class BoardDefault: BoardCommon {
     public var boardChars: [Character] = ["a", "b", "c", "d", "e", "f", "g", "h"]
     public private(set) var boardMode: BoardMode = .game
     public private(set) var playerColor: PieceColor = .white
-    public private(set) var beginNumberIndex = 7
-    public private(set) var endNumberIndex = 0
-    public private(set) var beginCharIndex = 0
-    public private(set) var endCharIndex = 7
     
     @Published public var cells: [[Cell]] = []
     

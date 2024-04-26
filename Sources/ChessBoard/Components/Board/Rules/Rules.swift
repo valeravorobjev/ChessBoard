@@ -29,8 +29,8 @@ extension BoardCommon {
         return possibles
     }
     
-    func possibleMove(numbers: [Int], possibleMoves: inout [LocationIndex], _ color: PieceColor, _ sidx: Int, _ nidx: Int) -> Bool {
-        if sidx > endCharIndex || sidx < beginCharIndex || nidx > endNumberIndex || nidx < beginNumberIndex {
+    func possibleMove(possibleMoves: inout [LocationIndex], _ sidx: Int, _ nidx: Int) -> Bool {
+        if sidx < 0 || sidx >= boardChars.count || nidx < 0 || nidx >= boardNumbers.count {
             return false
         }
         
@@ -40,7 +40,7 @@ extension BoardCommon {
         if cell.piece == nil {
             possibleMoves.append(possible)
             return true
-        } else if cell.piece != nil && cell.piece?.color != color {
+        } else if cell.piece != nil && cell.piece?.color != playerColor {
             possibleMoves.append(possible)
             return false
         }
@@ -59,6 +59,14 @@ extension BoardCommon {
     func endNIndex() -> Int {
         if self.playerColor == .white && !rotated {
             return self.boardNumbers.count - 1
+        }
+        
+        return 0
+    }
+    
+    func endSIndex() -> Int {
+        if self.playerColor == .white && !rotated {
+            return self.boardChars.count - 1
         }
         
         return 0

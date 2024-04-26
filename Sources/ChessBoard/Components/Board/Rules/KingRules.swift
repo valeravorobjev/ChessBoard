@@ -17,42 +17,42 @@ extension BoardCommon {
         var possibleNumberIndex = nidx + 1
         var possibleCharIndex = sidx + 1
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx + 1
         possibleCharIndex = sidx - 1
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx - 1
         possibleCharIndex = sidx + 1
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx - 1
         possibleCharIndex = sidx - 1
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx
         possibleCharIndex = sidx - 1
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx
         possibleCharIndex = sidx + 1
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx + 1
         possibleCharIndex = sidx
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx - 1
         possibleCharIndex = sidx
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         return possibleMoves
     }

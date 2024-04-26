@@ -14,8 +14,6 @@ extension BoardCommon {
         let nidx = location.nidx
         let sidx = location.sidx
         
-        let endNumberIndex = endNIndex()
-        
         // Check whether the pawn can rotate one or two moves
         if !lessNumberEndIndex(nidx) {
             return possibles
@@ -42,7 +40,7 @@ extension BoardCommon {
         let possibleUpRight = LocationIndex(sidx: nexStepChar(sidx, 1), nidx: nextPossibleUpStep)
         let possibleUpLeft = LocationIndex(sidx: backStepChar(sidx, 1), nidx: nextPossibleUpStep)
         
-        if possibleUpRight.sidx <= endCharIndex {
+        if possibleUpRight.sidx <= boardChars.count - 1 {
             let piece = self.cells[possibleUpRight.nidx][possibleUpRight.sidx].piece
             
             if piece != nil && piece?.color != playerColor {
@@ -50,7 +48,7 @@ extension BoardCommon {
             }
         }
         
-        if possibleUpLeft.sidx >= beginCharIndex {
+        if possibleUpLeft.sidx >= 0 {
             let piece = self.cells[possibleUpLeft.nidx][possibleUpLeft.sidx].piece
             
             if piece != nil && piece?.color != playerColor {

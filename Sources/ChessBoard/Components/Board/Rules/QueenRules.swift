@@ -20,7 +20,7 @@ extension BoardCommon {
             possibleNumberIndex -= 1
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -31,7 +31,7 @@ extension BoardCommon {
             possibleNumberIndex += 1
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -42,7 +42,7 @@ extension BoardCommon {
             possibleNumberIndex -= 1
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -53,7 +53,7 @@ extension BoardCommon {
             possibleNumberIndex += 1
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -62,7 +62,7 @@ extension BoardCommon {
         while possibleNumberIndex < 8 {
             possibleNumberIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, sidx, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, sidx, possibleNumberIndex) {
                 break
             }
         }
@@ -71,7 +71,7 @@ extension BoardCommon {
         while possibleNumberIndex > -1 {
             possibleNumberIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, sidx, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, sidx, possibleNumberIndex) {
                 break
             }
         }
@@ -80,7 +80,7 @@ extension BoardCommon {
         while possibleCharIndex > -1 {
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, nidx) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, nidx) {
                 break
             }
         }
@@ -89,7 +89,7 @@ extension BoardCommon {
         while possibleCharIndex < 8 {
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, nidx) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, nidx) {
                 break
             }
         }

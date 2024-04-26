@@ -15,10 +15,10 @@ extension BoardCommon {
         let sidx = location.sidx
         
         var possibleNumberIndex = nidx
-        while possibleNumberIndex < 8 {
+        while possibleNumberIndex < endNIndex() {
             possibleNumberIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, sidx, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, sidx, possibleNumberIndex) {
                 break
             }
         }
@@ -27,7 +27,7 @@ extension BoardCommon {
         while possibleNumberIndex > -1 {
             possibleNumberIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, sidx, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, sidx, possibleNumberIndex) {
                 break
             }
         }
@@ -36,16 +36,16 @@ extension BoardCommon {
         while possibleCharIndex > -1 {
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, nidx) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, nidx) {
                 break
             }
         }
         
         possibleCharIndex = sidx
-        while possibleCharIndex < 8 {
+        while possibleCharIndex < endSIndex() {
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, playerColor, possibleCharIndex, nidx) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, nidx) {
                 break
             }
         }
