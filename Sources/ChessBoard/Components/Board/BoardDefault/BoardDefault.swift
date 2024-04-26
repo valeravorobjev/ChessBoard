@@ -171,4 +171,10 @@ public class BoardDefault: BoardCommon {
         }
 
     }
+    
+    public func getCell(_ location: LocationCell) -> Cell {
+        let li = convertLCtoLI(location)
+        
+        return cells[li.nidx][li.sidx]
+    }
 }

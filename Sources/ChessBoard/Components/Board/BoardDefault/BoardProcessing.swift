@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Валерий Воробьев on 25.04.2024.
 //
@@ -8,45 +8,53 @@
 import Foundation
 
 extension BoardDefault {
-    
     /*
      Method run when user tap on cell.
      This is the main processing for board
      */
-    internal func processing(cell: Cell) -> Void {
-        
+    func processing(_ cell: Cell) {
         if self.boardMode == .game {
-            processingGame(cell)
+            self.processingGame(cell)
         } else if self.boardMode == .analisys {
-            processingAnalysis()
+            self.processingAnalysis()
         }
-        
     }
     
-    internal func processingGame(_ cell: Cell) -> Void {
-        
-        if !possibleCells.isEmpty {
-            let pc = possibleCells.first(where: {$0.id == cell.id})
-            
-//            for possibleCell in self.possibleCells {
-//                possibleCell.unpossible()
-//            }
-            
-            self.possibleCells.removeAll()
-            
-            if pc != nil && selectedCell?.piece != nil {
-                _ = self.move(from: selectedCell!.location, to: cell.location)
-                
-            }
-            
-        }
-        
-        resetSelected()
-        
-        if self.possibleCells.first(where: { c in
-            c.id == cell.id}) == nil {
+    func processingGame(_ cell: Cell) {
+        if selectedCell == nil && cell.piece == nil {
             return
         }
+        
+        if cell.piece != nil && cell.piece?.color != playerColor {
+            self.resetSelected()
+            return
+        }
+        
+        if selectedCell != nil && cell.piece?.color != playerColor && self.possibleCells.first(where: { c in c.id == cell.id }) == nil {
+            self.resetSelected()
+            return
+        }
+        
+        if !possibleCells.isEmpty {
+            let pc = possibleCells.first(where: { $0.id == cell.id })
+            
+            if pc != nil {
+                for possibleCell in self.possibleCells {
+                    possibleCell.unpossible()
+                }
+                    
+                self.possibleCells.removeAll()
+                    
+                if pc != nil, selectedCell?.piece != nil {
+                    _ = self.move(from: selectedCell!.location, to: cell.location)
+                }
+                
+                self.resetSelected()
+                return
+            }
+        }
+         
+        self.resetSelected()
         
         cell.selected.toggle()
         selectedCell = cell
@@ -63,18 +71,20 @@ extension BoardDefault {
             
             possibleCell.possible.toggle()
         }
-        
     }
     
-    internal func processingAnalysis() -> Void {
-        
-    }
+    func processingAnalysis() {}
     
-    internal func resetSelected() -> Void {
+    func resetSelected() {
+        selectedCell?.selected.toggle()
         selectedCell = nil
         selectedIndex = nil
         
+        for pc in possibleCells {
+            pc.selected = false
+            pc.possible = false
+        }
+        
         self.possibleCells.removeAll()
     }
-    
 }

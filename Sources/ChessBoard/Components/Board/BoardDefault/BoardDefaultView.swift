@@ -24,7 +24,7 @@ public struct BoardView: View {
                     GridRow {
                         ForEach(0..<board.boardChars.count, id: \.self) { j in
                             CellView(cell: board.cells[i][j], onSelected: {
-                                board.processing(cell: board.cells[i][j])
+                                board.processing(board.cells[i][j])
                             })
                         }
                     }

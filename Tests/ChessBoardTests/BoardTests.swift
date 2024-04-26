@@ -19,22 +19,24 @@ final class BoardTests: XCTestCase {
     }
 
     func testInitBoard() throws {
-        let board = Board(boardMode: .game, playerColor: .white)
+        let board = BoardDefault(boardMode: .game, playerColor: .white)
         board.initBoard()
     }
     
-    func testSelectCell() throws {
-        let board = Board(boardMode: .game, playerColor: .white)
-        
+    func testProcessing() throws {
+        let board = BoardDefault(boardMode: .game, playerColor: .white)
         board.initBoard()
-        board.selectCell(cell:board.cells[2][1])
+        
+        board.processing(board.getCell(LocationCell(char: "c", number: 2)))
+        board.processing(board.getCell(LocationCell(char: "c", number: 4)))
     }
+    
     
     func testMovePown() throws {
-        let board = Board(boardMode: .game, playerColor: .white)
+        let board = BoardDefault(boardMode: .game, playerColor: .white)
         board.initBoard()
         
-        board.selectCell(cell: board.cells[6][2])
+        board.processing(board.cells[6][2])
         
         assert(board.selectedCell != nil, "selected cell can't be nil")
         assert(board.selectedCell?.piece != nil, "selected cell must have piece pown")
@@ -47,19 +49,19 @@ final class BoardTests: XCTestCase {
         
         
         
-        board.selectCell(cell: board.cells[4][2])
+        board.processing(board.cells[4][2])
         assert(board.selectedCell?.location.toStr() == "c4", "pown must be on c4 cell")
         
-        board.selectCell(cell: board.cells[3][2])
+        board.processing(board.cells[3][2])
         assert(board.selectedCell?.location.toStr() == "c5", "pown must be on c5 cell")
         
-        board.selectCell(cell: board.cells[2][2])
+        board.processing(board.cells[2][2])
         assert(board.selectedCell?.location.toStr() == "c6", "pown must be on c6 cell")
         
-        board.selectCell(cell: board.cells[1][1])
+        board.processing(board.cells[1][1])
         assert(board.selectedCell?.location.toStr() == "b7", "pown must be on b7 cell")
         
-        board.selectCell(cell: board.cells[0][2])
+        board.processing(board.cells[0][2])
         assert(board.selectedCell?.location.toStr() == "c8", "pown must be on c8 cell")
         
         

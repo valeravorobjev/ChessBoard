@@ -8,7 +8,7 @@
 import Foundation
 
 // Cell coord. Example a4
-struct LocationCell {
+public struct LocationCell {
     var char: Character   // Letter designation of a coordinate
     var number: Int       // Number designation of a coordinate
 }

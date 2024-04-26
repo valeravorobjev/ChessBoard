@@ -19,4 +19,6 @@ public protocol BoardCommon: BoardCore, ObservableObject {
     func setPlayerColor(color: PieceColor) -> Void                  // Set player color: black or wight
     func setBoardMode(mode: BoardMode) -> Void                      // Set board mode: game, analysis
     func rotateBoard() -> Void                                      // Turn the board over
+    
+    func getCell(_ location: LocationCell) -> Cell                  // Return board's cell by cell location
 }
