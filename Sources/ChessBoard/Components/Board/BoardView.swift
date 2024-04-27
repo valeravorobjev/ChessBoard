@@ -9,13 +9,16 @@ import SwiftUI
 
 public struct BoardView<T: BoardCommon>: View {
     @ObservedObject public var board: T
+    private let moveReportEvent: ((_ moveReport: MoveReport?) -> Void)?
 
     public init() {
-        self.board = BoardDefault() as! T
+        board = BoardDefault() as! T
+        moveReportEvent = nil
     }
 
-    public init(board: T) {
+    public init(board: T, moveReportEvent: ((_ moveReport: MoveReport?) -> Void)? = nil) {
         self.board = board
+        self.moveReportEvent = moveReportEvent
     }
 
     public var body: some View {
@@ -25,7 +28,10 @@ public struct BoardView<T: BoardCommon>: View {
                     GridRow {
                         ForEach(0..<board.boardChars.count, id: \.self) { j in
                             CellView(cell: board.cells[i][j], onSelected: {
-                                board.processing(board.cells[i][j])
+                                let moveReport = board.processing(board.cells[i][j])
+                                if moveReportEvent != nil {
+                                    moveReportEvent!(moveReport)
+                                }
                             })
                         }
                     }
@@ -36,5 +42,7 @@ public struct BoardView<T: BoardCommon>: View {
 }
 
 #Preview {
-    BoardView(board: BoardDefault()).padding(100)
+    BoardView(board: BoardDefault(), moveReportEvent: { moveReport in
+        print("\(moveReport?.uci)")
+    }).padding(100)
 }
