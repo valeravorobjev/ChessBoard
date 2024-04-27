@@ -134,11 +134,11 @@ public class BoardDefault: BoardCommon {
         cells[numberIndex6B][7].setPiece(.pown, .black)
     }
     
-    public func setBoardMode(mode: BoardMode) {
+    public func changeBoardMode(mode: BoardMode) {
         boardMode = mode
     }
     
-    public func setPlayerColor(color: PieceColor) {
+    public func changePlayerColor(color: PieceColor) {
         playerColor = color
     }
     
@@ -164,5 +164,121 @@ public class BoardDefault: BoardCommon {
         let li = convertLCtoLI(location)
         
         return cells[li.nidx][li.sidx]
+    }
+    
+    public func processing(_ cell: Cell) -> MoveReport? {
+        var moveReport: MoveReport? = nil
+        if boardMode == .game {
+            moveReport = processingGame(cell)
+        } else if boardMode == .analisys {
+            processingAnalysis()
+        }
+        
+        return moveReport
+    }
+    
+    public func makeMove(from: LocationCell, to: LocationCell) -> MoveReport? {
+        let fromLi = convertLCtoLI(from)
+        let toLi = convertLCtoLI(to)
+        
+        _ = processing(cells[fromLi.nidx][fromLi.sidx])
+        let moveReport = processing(cells[toLi.nidx][toLi.sidx])
+        
+        return moveReport
+    }
+    
+    private func processingGame(_ cell: Cell) -> MoveReport? {
+        if selectedCell == nil && cell.piece == nil {
+            return nil
+        }
+        
+        if selectedCell != nil && selectedCell?.id == cell.id {
+            resetSelected()
+            return nil
+        }
+        
+        if cell.piece != nil && cell.piece?.color != playerColor && !cell.possible {
+            resetSelected()
+            return nil
+        }
+        
+        if selectedCell != nil && cell.piece?.color != playerColor && possibleCells.first(where: { c in c.id == cell.id }) == nil {
+            resetSelected()
+            return nil
+        }
+        
+        if !possibleCells.isEmpty {
+            let pc = possibleCells.first(where: { $0.id == cell.id })
+
+            if pc != nil {
+                for possibleCell in possibleCells {
+                    possibleCell.unpossible()
+                }
+
+                possibleCells.removeAll()
+
+                var moveReport: MoveReport? = nil
+                if pc != nil, selectedCell?.piece != nil {
+                    moveReport = move(from: selectedCell!.location, to: cell.location)
+                }
+
+                resetSelected()
+                return moveReport
+            }
+        }
+         
+        resetSelected()
+        
+        cell.selected.toggle()
+        selectedCell = cell
+        selectedIndex = LocationIndex(
+            sidx: boardChars.firstIndex(of: cell.location.char)!,
+            nidx: boardNumbers.firstIndex(of: cell.location.number)!
+        )
+        
+        let possibleIndexes = possibleMoves(by: selectedCell!.piece!.type, location: selectedIndex!)
+        
+        for possibleIndex in possibleIndexes {
+            let possibleCell = cells[possibleIndex.nidx][possibleIndex.sidx]
+            possibleCell.possible.toggle()
+            possibleCells.append(possibleCell)
+        }
+        
+        return nil
+    }
+    
+    private func processingAnalysis() {}
+    
+    private func resetSelected() {
+        selectedCell?.selected = false
+        selectedCell = nil
+        selectedIndex = nil
+        
+        for pc in possibleCells {
+            pc.selected = false
+            pc.possible = false
+        }
+        
+        possibleCells.removeAll()
+    }
+    
+    private func getCellByLocationCell(_ lc: LocationCell) -> Cell {
+        let li = convertLCtoLI(lc)
+        
+        return cells[li.nidx][li.sidx]
+    }
+    
+    private func move(from: LocationCell, to: LocationCell) -> MoveReport {
+        let fromCell = getCellByLocationCell(from)
+        let toCell = getCellByLocationCell(to)
+        
+        let mv = MoveReport(oldLoc: from, newLoc: to, ownPiece: fromCell.piece!, targetPiece: toCell.piece)
+        
+        let tmp = fromCell.piece!
+        
+        fromCell.removePiece()
+        toCell.setPiece(tmp.type, tmp.color)
+        
+        return mv
     }
 }

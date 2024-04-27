@@ -7,16 +7,17 @@
 
 import SwiftUI
 
-public struct BoardView: View {
-    @ObservedObject public var board: BoardDefault
-    
+public struct BoardView<T: BoardCommon>: View {
+    @ObservedObject public var board: T
+
     public init() {
-        self.board = BoardDefault()
+        self.board = BoardDefault() as! T
     }
-    public init(board: BoardDefault) {
+
+    public init(board: T) {
         self.board = board
     }
-    
+
     public var body: some View {
         GeometryReader { geometry in
             Grid(horizontalSpacing: 0, verticalSpacing: 0) {
