@@ -25,25 +25,26 @@ final class BoardTests: XCTestCase {
     func testPownProcessing() throws {
         let board = BoardDefault(boardMode: .game, playerColor: .white)
         board.initBoard()
+        board.rotateBoard()
         
-        board.processing(board.getCell(LocationCell("c", 2)))
-        board.processing(board.getCell(LocationCell("c", 4)))
-        board.processing(board.getCell(LocationCell("c", 4)))
-        board.processing(board.getCell(LocationCell("c", 5)))
-        board.processing(board.getCell(LocationCell("c", 5)))
-        board.processing(board.getCell(LocationCell("c", 6)))
-        board.processing(board.getCell(LocationCell("c", 6)))
-        board.processing(board.getCell(LocationCell("b", 7)))
-        board.processing(board.getCell(LocationCell("b", 7)))
+        _ = board.processing(board.getCell(LocationCell("c", 2)))
+//        _ = board.processing(board.getCell(LocationCell("c", 4)))
+//        _ = board.processing(board.getCell(LocationCell("c", 4)))
+//        _ = board.processing(board.getCell(LocationCell("c", 5)))
+//        _ = board.processing(board.getCell(LocationCell("c", 5)))
+//        _ = board.processing(board.getCell(LocationCell("c", 6)))
+//        _ = board.processing(board.getCell(LocationCell("c", 6)))
+//        _ = board.processing(board.getCell(LocationCell("b", 7)))
+//        _ = board.processing(board.getCell(LocationCell("b", 7)))
     }
     
     func testRockProcessing() throws {
         let board = BoardDefault(boardMode: .game, playerColor: .white)
         board.initBoard()
         
-        board.processing(board.getCell(LocationCell("a", 2)))
-        board.processing(board.getCell(LocationCell("a", 4)))
-        board.processing(board.getCell(LocationCell("a", 1)))
+        _ = board.processing(board.getCell(LocationCell("a", 2)))
+        _ = board.processing(board.getCell(LocationCell("a", 4)))
+        _ = board.processing(board.getCell(LocationCell("a", 1)))
 //        board.processing(board.getCell(LocationCell("a", 3)))
     }
     

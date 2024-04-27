@@ -158,6 +158,10 @@ public class BoardDefault: BoardCommon {
                 cells[i][j] = tmp
             }
         }
+        
+        boardNumbers.reverse()
+        
+        rotated = !rotated
     }
     
     public func getCell(_ location: LocationCell) -> Cell {
