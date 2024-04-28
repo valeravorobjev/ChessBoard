@@ -138,8 +138,8 @@ public class BoardDefault: BoardCommon {
         boardMode = mode
     }
     
-    public func changePlayerColor(color: PieceColor) {
-        playerColor = color
+    public func changePlayer() {
+        playerColor = playerColor.toggle()
     }
     
     public func rotateBoard() {

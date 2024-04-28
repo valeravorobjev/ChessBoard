@@ -49,27 +49,43 @@ extension BoardCommon {
     }
     
     func nextStepNumber(_ nidx: Int, _ steps: Int) -> Int {
-        if self.playerColor == .white && !rotated {
-            return nidx - steps
+        if self.playerColor == .white {
+            if !rotated {
+                return nidx - steps
+            } else {
+                return nidx + steps
+            }
+        } else {
+            if !rotated {
+                return nidx + steps
+            } else {
+                return nidx - steps
+            }
         }
-        
-        return nidx + steps
     }
     
     func endNIndex() -> Int {
-        if self.playerColor == .white && !rotated {
-            return self.boardNumbers.count - 1
+        if self.playerColor == .white {
+            if !rotated {
+                return 0
+            } else {
+                return self.boardNumbers.count - 1
+            }
         }
         
+        if self.playerColor == .black {
+            if !rotated {
+                return self.boardNumbers.count - 1
+            } else {
+                return 0
+            }
+        }
+    
         return 0
     }
     
     func endSIndex() -> Int {
-        if self.playerColor == .white && !rotated {
-            return self.boardChars.count - 1
-        }
-        
-        return 0
+        return self.boardChars.count - 1
     }
     
     func lessNumberEndIndex(_ nidx: Int) -> Bool {
@@ -83,7 +99,15 @@ extension BoardCommon {
             }
         }
         
-        if self.playerColor == .black {}
+        if self.playerColor == .black {
+            if !rotated && nidx < self.boardNumbers.count - 1 {
+                return true
+            } else if rotated && nidx > 0 {
+                return true
+            } else {
+                return false
+            }
+        }
     
         return false
     }

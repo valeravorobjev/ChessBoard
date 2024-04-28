@@ -16,10 +16,8 @@ public protocol BoardCommon: ObservableObject {
     func initBoard() -> Void
     /// Clear chessboard. Remove all pieces
     func clearBoard() -> Void
-    /// Set player color: black or wight
-    /// - Parameters:
-    ///  - color: Player color
-    func changePlayerColor(color: PieceColor) -> Void
+    /// Change current player. If the player was white, he will turn black on the turn.
+    func changePlayer() -> Void
     /// Set board mode: game, analysis
     /// - Parameters:
     ///  - mode: Board mode

@@ -15,6 +15,7 @@ struct BoardPlaygroundView: View {
             HStack {
                 Button("Init", action: board.initBoard)
                 Button("Rotate", action: board.rotateBoard)
+                Button("Change Player", action: board.changePlayer)
                 Button("Clear", action: board.clearBoard)
                 Button("MakeMove") {
                     _ = board.makeMove(from: LocationCell("c", 2), to: LocationCell("c", 4))
