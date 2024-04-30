@@ -21,6 +21,7 @@ public class Cell: Identifiable, ObservableObject {
     
     @Published var selected: Bool = false
     @Published var possible: Bool = false
+    @Published var checkKing: Bool = false
     @Published var color: PieceColor
     @Published private(set) var piece: Piece?
     
@@ -35,7 +36,7 @@ public class Cell: Identifiable, ObservableObject {
     }
     
     func setPiece(_ type: PieceType, _ color: PieceColor) {
-        self.piece = Piece(type: type, color: color)
+        self.piece = Piece(type, color)
     }
 
     func removePiece() {
@@ -48,6 +49,10 @@ public class Cell: Identifiable, ObservableObject {
     
     func unselected() {
         self.selected = false
+    }
+    
+    func unckeckKing() {
+        self.checkKing = false
     }
     
     func xoffset(_ size: CGFloat) -> CGFloat {

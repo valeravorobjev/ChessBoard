@@ -2,32 +2,27 @@
 //  File.swift
 //
 //
-//  Created by Валерий Воробьев on 08.01.2024.
+//  Created by Валерий Воробьев on 30.04.2024.
 //
 
 import Foundation
 
-/// Piece move structure whth data about move action
-public struct MoveReport {
+public struct ShadowMoveReport {
     /// Old piece coordinate
-    var oldLoc: LocationCell
+    var oldLoc: LocationIndex
     /// New piece coordinate after move
-    var newLoc: LocationCell
+    var newLoc: LocationIndex
     /// The piece that move
     var ownPiece: Piece
     /// The piece that was taken
     var targetPiece: Piece?
-    /// Chess UCI format notation
-    var uci: String {
-        return "\(oldLoc.toStr())\(newLoc.toStr())"
-    }
 
     /// Is the king under the check
     private(set) var checkKing: Bool
     /// Has the king been checkmated
     private(set) var checkMate: Bool
 
-    init(oldLoc: LocationCell, newLoc: LocationCell, ownPiece: Piece, targetPiece: Piece? = nil) {
+    init(oldLoc: LocationIndex, newLoc: LocationIndex, ownPiece: Piece, targetPiece: Piece? = nil) {
         self.oldLoc = oldLoc
         self.newLoc = newLoc
         self.ownPiece = ownPiece
@@ -36,7 +31,7 @@ public struct MoveReport {
         self.checkMate = false
     }
 
-    init(oldLoc: LocationCell, newLoc: LocationCell, ownPiece: Piece, targetPiece: Piece? = nil, checkKing: Bool, checkMate: Bool) {
+    init(oldLoc: LocationIndex, newLoc: LocationIndex, ownPiece: Piece, targetPiece: Piece? = nil, checkKing: Bool, checkMate: Bool) {
         self.oldLoc = oldLoc
         self.newLoc = newLoc
         self.ownPiece = ownPiece

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension BoardCommon {
+extension ShadowBoard {
     func pownPossibleMoves(_ location: LocationIndex) -> [LocationIndex] {
         var possibles = [LocationIndex]()
         
@@ -22,14 +22,14 @@ extension BoardCommon {
         let possibleOne = LocationIndex(sidx: sidx, nidx: nextStepNumber(nidx, 1))
             
         // if cell is null, pawn can be moved one step
-        if self.cells[possibleOne.nidx][possibleOne.sidx].piece == nil {
+        if self.board[possibleOne.nidx][possibleOne.sidx] == nil {
             possibles.append(possibleOne)
                 
             if nidx == self.pownStartNIdx() {
                 let possibleTwo = LocationIndex(sidx: possibleOne.sidx, nidx: nextStepNumber(possibleOne.nidx, 1))
                     
                 // if cell is null, pawn can be moved one step
-                if self.cells[possibleTwo.nidx][possibleTwo.sidx].piece == nil {
+                if self.board[possibleTwo.nidx][possibleTwo.sidx] == nil {
                     possibles.append(possibleTwo)
                 }
             }
@@ -41,7 +41,7 @@ extension BoardCommon {
         let possibleUpLeft = LocationIndex(sidx: backStepChar(sidx, 1), nidx: nextPossibleUpStep)
         
         if possibleUpRight.sidx <= boardChars.count - 1 {
-            let piece = self.cells[possibleUpRight.nidx][possibleUpRight.sidx].piece
+            let piece = self.board[possibleUpRight.nidx][possibleUpRight.sidx]
             
             if piece != nil && piece?.color != playerColor {
                 possibles.append(possibleUpRight)
@@ -49,7 +49,7 @@ extension BoardCommon {
         }
         
         if possibleUpLeft.sidx >= 0 {
-            let piece = self.cells[possibleUpLeft.nidx][possibleUpLeft.sidx].piece
+            let piece = self.board[possibleUpLeft.nidx][possibleUpLeft.sidx]
             
             if piece != nil && piece?.color != playerColor {
                 possibles.append(possibleUpLeft)

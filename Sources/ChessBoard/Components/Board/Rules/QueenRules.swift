@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension BoardCommon {
+extension ShadowBoard {
     func queenPossibleMoves(_ location: LocationIndex) -> [LocationIndex] {
         var possibleMoves = [LocationIndex]()
         

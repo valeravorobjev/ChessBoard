@@ -25,11 +25,11 @@ final class BoardTests: XCTestCase {
     func testPownProcessing() throws {
         let board = BoardDefault(boardMode: .game, playerColor: .white)
         board.initBoard()
-        board.rotateBoard()
+//        board.changePlayer()
         
         _ = board.processing(board.getCell(LocationCell("c", 2)))
-//        _ = board.processing(board.getCell(LocationCell("c", 4)))
-//        _ = board.processing(board.getCell(LocationCell("c", 4)))
+        _ = board.processing(board.getCell(LocationCell("c", 4)))
+        _ = board.processing(board.getCell(LocationCell("c", 4)))
 //        _ = board.processing(board.getCell(LocationCell("c", 5)))
 //        _ = board.processing(board.getCell(LocationCell("c", 5)))
 //        _ = board.processing(board.getCell(LocationCell("c", 6)))
@@ -46,18 +46,6 @@ final class BoardTests: XCTestCase {
         _ = board.processing(board.getCell(LocationCell("a", 4)))
         _ = board.processing(board.getCell(LocationCell("a", 1)))
 //        board.processing(board.getCell(LocationCell("a", 3)))
-    }
-    
-    func testPownPossibleMoves() throws {
-        let board = BoardDefault(boardMode: .game, playerColor: .white)
-        board.initBoard()
-        
-        let lc = LocationCell("c", 6)
-        let li = board.convertLCtoLI(lc)
-        
-        let pms = board.pownPossibleMoves(li)
-        
-        assert(pms.count == 2, "pown possible moves must have 2 cels")
     }
     
     func testMovePown() throws {

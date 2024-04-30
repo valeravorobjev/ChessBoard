@@ -43,14 +43,8 @@ public protocol BoardCommon: ObservableObject {
 
     /// The cells on the chessboard
     var cells: [[Cell]] { get }
-    /// Determines whether the field is rotated or not
-    var rotated: Bool { get }
-    /// Player color
-    var playerColor: PieceColor { get }
-    /// Board's numbers
-    var boardNumbers: [Int] { get }
-    /// Board's chars
-    var boardChars: [Character] { get }
-    /// Game mode (game or analysis)
-    var boardMode: BoardMode { get }
+    /// Return board numbers count
+    var boardNumbersCount: Int { get }
+    /// Return board chars count
+    var boardCharsCount: Int { get }
 }

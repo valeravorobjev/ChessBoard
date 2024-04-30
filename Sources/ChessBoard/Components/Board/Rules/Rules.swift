@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension BoardCommon {
+extension ShadowBoard {
     func possibleMoves(by: PieceType, location: LocationIndex) -> [LocationIndex] {
         var possibles: [LocationIndex] = []
         
@@ -30,17 +30,17 @@ extension BoardCommon {
     }
     
     func possibleMove(possibleMoves: inout [LocationIndex], _ sidx: Int, _ nidx: Int) -> Bool {
-        if sidx < 0 || sidx >= boardChars.count || nidx < 0 || nidx >= boardNumbers.count {
+        if sidx < 0 || sidx >= self.boardChars.count || nidx < 0 || nidx >= self.boardNumbers.count {
             return false
         }
         
         let possible = LocationIndex(sidx: sidx, nidx: nidx)
-        let cell = self.cells[nidx][sidx]
+        let piece = self.board[nidx][sidx]
         
-        if cell.piece == nil {
+        if piece == nil {
             possibleMoves.append(possible)
             return true
-        } else if cell.piece != nil && cell.piece?.color != playerColor {
+        } else if piece != nil && piece?.color != self.playerColor {
             possibleMoves.append(possible)
             return false
         }
@@ -50,13 +50,13 @@ extension BoardCommon {
     
     func nextStepNumber(_ nidx: Int, _ steps: Int) -> Int {
         if self.playerColor == .white {
-            if !rotated {
+            if !self.rotated {
                 return nidx - steps
             } else {
                 return nidx + steps
             }
         } else {
-            if !rotated {
+            if !self.rotated {
                 return nidx + steps
             } else {
                 return nidx - steps
@@ -66,7 +66,7 @@ extension BoardCommon {
     
     func endNIndex() -> Int {
         if self.playerColor == .white {
-            if !rotated {
+            if !self.rotated {
                 return 0
             } else {
                 return self.boardNumbers.count - 1
@@ -74,7 +74,7 @@ extension BoardCommon {
         }
         
         if self.playerColor == .black {
-            if !rotated {
+            if !self.rotated {
                 return self.boardNumbers.count - 1
             } else {
                 return 0
@@ -90,9 +90,9 @@ extension BoardCommon {
     
     func lessNumberEndIndex(_ nidx: Int) -> Bool {
         if self.playerColor == .white {
-            if !rotated && nidx > 0 {
+            if !self.rotated && nidx > 0 {
                 return true
-            } else if rotated && nidx < self.boardNumbers.count - 1 {
+            } else if self.rotated && nidx < self.boardNumbers.count - 1 {
                 return true
             } else {
                 return false
@@ -100,9 +100,9 @@ extension BoardCommon {
         }
         
         if self.playerColor == .black {
-            if !rotated && nidx < self.boardNumbers.count - 1 {
+            if !self.rotated && nidx < self.boardNumbers.count - 1 {
                 return true
-            } else if rotated && nidx > 0 {
+            } else if self.rotated && nidx > 0 {
                 return true
             } else {
                 return false

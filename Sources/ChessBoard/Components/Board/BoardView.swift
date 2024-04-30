@@ -24,9 +24,9 @@ public struct BoardView<T: BoardCommon>: View {
     public var body: some View {
         GeometryReader { geometry in
             Grid(horizontalSpacing: 0, verticalSpacing: 0) {
-                ForEach(0..<board.boardNumbers.count, id: \.self) { i in
+                ForEach(0..<board.boardNumbersCount, id: \.self) { i in
                     GridRow {
-                        ForEach(0..<board.boardChars.count, id: \.self) { j in
+                        ForEach(0..<board.boardCharsCount, id: \.self) { j in
                             CellView(cell: board.cells[i][j], onSelected: {
                                 let moveReport = board.processing(board.cells[i][j])
                                 if moveReportEvent != nil {
