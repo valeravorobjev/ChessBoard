@@ -20,40 +20,30 @@ extension ShadowBoard {
         }
         
         let possibleOne = LocationIndex(sidx: sidx, nidx: nextStepNumber(nidx, 1))
-            
-        // if cell is null, pawn can be moved one step
+        
         if self.board[possibleOne.nidx][possibleOne.sidx] == nil {
-            possibles.append(possibleOne)
-                
-            if nidx == self.pownStartNIdx() {
-                let possibleTwo = LocationIndex(sidx: possibleOne.sidx, nidx: nextStepNumber(possibleOne.nidx, 1))
-                    
-                // if cell is null, pawn can be moved one step
-                if self.board[possibleTwo.nidx][possibleTwo.sidx] == nil {
-                    possibles.append(possibleTwo)
-                }
+            _ = possibleMove(possibleMoves: &possibles, possibleOne.sidx, possibleOne.nidx)
+        }
+            
+        if nidx == self.pownStartNIdx() {
+            let possibleTwo = LocationIndex(sidx: possibleOne.sidx, nidx: nextStepNumber(possibleOne.nidx, 1))
+            
+            if self.board[possibleTwo.nidx][possibleTwo.sidx] == nil {
+                _ = possibleMove(possibleMoves: &possibles, possibleTwo.sidx, possibleTwo.nidx)
             }
         }
         
-        let nextPossibleUpStep = nextStepNumber(nidx, 1)
+        let possibleUpRight = LocationIndex(sidx: nexStepChar(sidx, 1), nidx: possibleOne.nidx)
+        let possibleUpLeft = LocationIndex(sidx: backStepChar(sidx, 1), nidx: possibleOne.nidx)
         
-        let possibleUpRight = LocationIndex(sidx: nexStepChar(sidx, 1), nidx: nextPossibleUpStep)
-        let possibleUpLeft = LocationIndex(sidx: backStepChar(sidx, 1), nidx: nextPossibleUpStep)
-        
-        if possibleUpRight.sidx <= boardChars.count - 1 {
-            let piece = self.board[possibleUpRight.nidx][possibleUpRight.sidx]
-            
-            if piece != nil && piece?.color != playerColor {
-                possibles.append(possibleUpRight)
-            }
+        if self.board[possibleUpRight.nidx][possibleUpRight.sidx] != nil 
+            && self.board[possibleUpRight.nidx][possibleUpRight.sidx]?.color != playerColor {
+            _ = possibleMove(possibleMoves: &possibles, possibleUpRight.sidx, possibleUpRight.nidx)
         }
         
-        if possibleUpLeft.sidx >= 0 {
-            let piece = self.board[possibleUpLeft.nidx][possibleUpLeft.sidx]
-            
-            if piece != nil && piece?.color != playerColor {
-                possibles.append(possibleUpLeft)
-            }
+        if self.board[possibleUpLeft.nidx][possibleUpLeft.sidx] != nil 
+            && self.board[possibleUpLeft.nidx][possibleUpLeft.sidx]?.color != playerColor {
+            _ = possibleMove(possibleMoves: &possibles, possibleUpLeft.sidx, possibleUpLeft.nidx)
         }
         
         return possibles
@@ -62,12 +52,16 @@ extension ShadowBoard {
     func pownStartNIdx() -> Int {
         if self.playerColor == .white {
             if !self.rotated {
-                return 6
+                return numberStartIndex - 1
             } else {
-                return 1
+                return numberStartIndex + 1
+            }
+        } else {
+            if !self.rotated {
+                return numberStartIndex + 1
+            } else {
+                return numberStartIndex - 1
             }
         }
-        
-        return 1
     }
 }

@@ -34,6 +34,38 @@ class ShadowBoard {
         board = Array(repeating: Array(repeating: nil, count: boardNumbers.count), count: boardChars.count)
     }
 
+    var numberStartIndex: Int {
+        if playerColor == .white {
+            return !rotated ? boardNumbers.count - 1 : 0
+        } else {
+            return !rotated ? 0 : boardNumbers.count - 1
+        }
+    }
+
+    var numberEndIndex: Int {
+        if playerColor == .white {
+            return !rotated ? 0 : boardNumbers.count - 1
+        } else {
+            return !rotated ? boardNumbers.count - 1 : 0
+        }
+    }
+
+    var charStartIndex: Int {
+        if playerColor == .white {
+            return !rotated ? 0 : boardChars.count - 1
+        } else {
+            return !rotated ? boardChars.count - 1 : 0
+        }
+    }
+
+    var charEndIndex: Int {
+        if playerColor == .white {
+            return !rotated ? boardChars.count - 1 : 0
+        } else {
+            return !rotated ? 0 : boardChars.count - 1
+        }
+    }
+
     func isCheck(color: PieceColor) -> Bool {
         return false
     }
@@ -51,18 +83,23 @@ class ShadowBoard {
     }
 
     func rotate() {
-        for i in 0..<boardNumbers.count / 2 {
-            for j in 0..<boardChars.count {
-                let tmp = board[boardNumbers.count - (i + 1)][j]
-                board[boardNumbers.count - (i + 1)][j] = board[i][j]
-                board[i][j] = tmp
-            }
-        }
+        var boardRotated: [[Piece?]] = []
 
         boardNumbers.reverse()
         boardChars.reverse()
 
         rotated = !rotated
+
+        for i in 0..<boardNumbers.count {
+            var row: [Piece?] = []
+            for j in 0..<boardChars.count {
+                row.append(board[boardNumbers.count - 1 - i][boardChars.count - 1 - j])
+            }
+
+            boardRotated.append(row)
+        }
+
+        board = boardRotated
 
         findKingIndexes()
     }
@@ -153,6 +190,7 @@ class ShadowBoard {
         let report = ShadowMoveReport(oldLoc: from, newLoc: to, ownPiece: board[from.nidx][from.sidx]!, targetPiece: board[to.nidx][to.sidx])
 
         board[to.nidx][to.sidx] = board[from.nidx][from.sidx]
+        board[from.nidx][from.sidx] = nil
 
         if board[to.nidx][to.sidx]!.type == .king {
             if board[to.nidx][to.sidx]!.color == .white {
@@ -165,5 +203,23 @@ class ShadowBoard {
         // TODO: add check king and check mate
 
         return report
+    }
+
+    func printBoardCoords() -> Void {
+        for i in 0..<boardNumbers.count {
+            for j in 0..<boardChars.count {
+                print("\(boardChars[j])\(boardNumbers[i]) ", terminator: "")
+            }
+            print()
+        }
+    }
+
+    func printBoard() -> Void {
+        for i in 0..<boardNumbers.count {
+            for j in 0..<boardChars.count {
+                print("\(boardChars[j])\(boardNumbers[i])\(board[i][j]?.type.rawValue ?? " ") ", terminator: "")
+            }
+            print()
+        }
     }
 }

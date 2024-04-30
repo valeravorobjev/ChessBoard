@@ -26,19 +26,7 @@ public class BoardDefault: BoardCommon {
     
     public required init(boardMode: BoardMode = .game, playerColor: PieceColor = .white) {
         shadowBoard = ShadowBoard(playerColor: playerColor, boardMode: boardMode)
-        
-        for numberIndex in 0..<8 {
-            var rowCells = [Cell]()
-            for charIndex in 0..<8 {
-                let color = cellColor(charIndex, numberIndex)
-                let location = cellCoord(charIndex, numberIndex)
-                let show = showCellCoords(charIndex, numberIndex)
-                
-                let cell = Cell(color: color, location: location, show: show)
-                rowCells.append(cell)
-            }
-            cells.append(rowCells)
-        }
+        renderAllCells()
     }
     
     public func clearBoard() {
@@ -77,17 +65,18 @@ public class BoardDefault: BoardCommon {
         shadowBoard.rotate()
         
         renderAllCells()
+        shadowBoard.printBoard()
     }
     
     public func getCell(_ location: LocationCell) -> Cell {
-        let li = convertLCtoLI(location)
+        let li = shadowBoard.convertLCtoLI(location)
         
         return cells[li.nidx][li.sidx]
     }
     
     public func makeMove(from: LocationCell, to: LocationCell) -> MoveReport? {
-        let fromLi = convertLCtoLI(from)
-        let toLi = convertLCtoLI(to)
+        let fromLi = shadowBoard.convertLCtoLI(from)
+        let toLi = shadowBoard.convertLCtoLI(to)
         
         _ = processing(cells[fromLi.nidx][fromLi.sidx])
         let moveReport = processing(cells[toLi.nidx][toLi.sidx])
@@ -140,8 +129,7 @@ public class BoardDefault: BoardCommon {
     }
     
     private func processingGame(_ cell: Cell) -> MoveReport? {
-        let pieceOperationType = shadowBoard.checkPieceOperationType(location: convertLCtoLI(cell.location), possibles: possibleCells.map {
-            convertLCtoLI($0.location)
+        let pieceOperationType = shadowBoard.checkPieceOperationType(location: shadowBoard.convertLCtoLI(cell.location), possibles: possibleCells.map { shadowBoard.convertLCtoLI($0.location)
         })
         
         switch pieceOperationType {
@@ -198,7 +186,7 @@ public class BoardDefault: BoardCommon {
     }
     
     private func getCellByLocationCell(_ lc: LocationCell) -> Cell {
-        let li = convertLCtoLI(lc)
+        let li = shadowBoard.convertLCtoLI(lc)
         
         return cells[li.nidx][li.sidx]
     }
@@ -207,8 +195,8 @@ public class BoardDefault: BoardCommon {
         let fromCell = getCellByLocationCell(from)
         let toCell = getCellByLocationCell(to)
         
-        let smr = shadowBoard.move(from: convertLCtoLI(from), to: convertLCtoLI(to))
-        let mr = convertSMRtoMR(smr)
+        let smr = shadowBoard.move(from: shadowBoard.convertLCtoLI(from), to: shadowBoard.convertLCtoLI(to))
+        let mr = shadowBoard.convertSMRtoMR(smr)
         
         let tmp = fromCell.piece!
         
@@ -219,33 +207,25 @@ public class BoardDefault: BoardCommon {
     }
     
     private func renderAllCells() -> Void {
-        for i in 0..<shadowBoard.boardNumbers.count {
-            for j in 0..<shadowBoard.boardChars.count {
-                let piece = shadowBoard.board[i][j]
+        cells = []
+        for numberIndex in 0..<shadowBoard.boardNumbers.count {
+            var rowCells = [Cell]()
+            for charIndex in 0..<shadowBoard.boardChars.count {
+                let color = cellColor(charIndex, numberIndex)
+                let location = cellCoord(charIndex, numberIndex)
+                let show = showCellCoords(charIndex, numberIndex)
+                
+                let cell = Cell(color: color, location: location, show: show)
+                rowCells.append(cell)
+                
+                let piece = shadowBoard.board[numberIndex][charIndex]
                 if piece == nil {
                     continue
                 }
-                
-                cells[i][j].setPiece(piece!.type, piece!.color)
-            }
-        }
-    }
-    
-    func convertLCtoLI(_ lc: LocationCell) -> LocationIndex {
-        let sidx = shadowBoard.boardChars.firstIndex(of: lc.char)
-        let nidx = shadowBoard.boardNumbers.firstIndex(of: lc.number)
 
-        return LocationIndex(sidx: sidx!, nidx: nidx!)
-    }
-    
-    func convertLItoLC(_ li: LocationIndex) -> LocationCell {
-        let char = shadowBoard.boardChars[li.sidx]
-        let number = shadowBoard.boardNumbers[li.nidx]
-        
-        return LocationCell(char, number)
-    }
-    
-    func convertSMRtoMR(_ smr: ShadowMoveReport) -> MoveReport {
-        return MoveReport(oldLoc: convertLItoLC(smr.oldLoc), newLoc: convertLItoLC(smr.newLoc), ownPiece: smr.ownPiece, targetPiece: smr.targetPiece, checkKing: smr.checkKing, checkMate: smr.checkMate)
+                cell.setPiece(piece!.type, piece!.color)
+            }
+            cells.append(rowCells)
+        }
     }
 }
