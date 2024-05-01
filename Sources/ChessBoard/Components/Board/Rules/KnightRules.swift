@@ -7,8 +7,8 @@
 
 import Foundation
 
-extension Board {
-    func knightPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
+extension ShadowBoard {
+    func knightPossibleMoves(_ location: LocationIndex) -> [LocationIndex] {
         var possibleMoves = [LocationIndex]()
         
         let nidx = location.nidx
@@ -17,42 +17,42 @@ extension Board {
         var possibleNumberIndex = nidx + 2
         var possibleCharIndex = sidx + 1
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx + 2
         possibleCharIndex = sidx - 1
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx - 2
         possibleCharIndex = sidx + 1
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx - 2
         possibleCharIndex = sidx - 1
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx + 1
         possibleCharIndex = sidx - 2
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx - 1
         possibleCharIndex = sidx - 2
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx + 1
         possibleCharIndex = sidx + 2
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         possibleNumberIndex = nidx - 1
         possibleCharIndex = sidx + 2
         
-        _ = possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex)
+        _ = possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex)
         
         return possibleMoves
     }

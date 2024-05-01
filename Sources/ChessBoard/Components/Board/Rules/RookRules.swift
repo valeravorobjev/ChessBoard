@@ -7,18 +7,18 @@
 
 import Foundation
 
-extension Board {
-    func rookPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
+extension ShadowBoard {
+    func rookPossibleMoves(_ location: LocationIndex) -> [LocationIndex] {
         var possibleMoves = [LocationIndex]()
         
         let nidx = location.nidx
         let sidx = location.sidx
         
         var possibleNumberIndex = nidx
-        while possibleNumberIndex < 8 {
+        while possibleNumberIndex < endNIndex() {
             possibleNumberIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, sidx, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, sidx, possibleNumberIndex) {
                 break
             }
         }
@@ -27,7 +27,7 @@ extension Board {
         while possibleNumberIndex > -1 {
             possibleNumberIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, sidx, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, sidx, possibleNumberIndex) {
                 break
             }
         }
@@ -36,16 +36,16 @@ extension Board {
         while possibleCharIndex > -1 {
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, nidx) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, nidx) {
                 break
             }
         }
         
         possibleCharIndex = sidx
-        while possibleCharIndex < 8 {
+        while possibleCharIndex < endSIndex() {
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, nidx) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, nidx) {
                 break
             }
         }

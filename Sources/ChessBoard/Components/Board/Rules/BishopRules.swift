@@ -7,8 +7,8 @@
 
 import Foundation
 
-extension Board {
-    func bishopPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
+extension ShadowBoard {
+    func bishopPossibleMoves(_ location: LocationIndex) -> [LocationIndex] {
         var possibleMoves = [LocationIndex]()
         
         let sidx = location.sidx
@@ -20,10 +20,9 @@ extension Board {
             possibleNumberIndex -= 1
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex) {
                 break
             }
-            
         }
         
         possibleNumberIndex = nidx
@@ -32,7 +31,7 @@ extension Board {
             possibleNumberIndex += 1
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -43,7 +42,7 @@ extension Board {
             possibleNumberIndex -= 1
             possibleCharIndex += 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
@@ -54,11 +53,10 @@ extension Board {
             possibleNumberIndex += 1
             possibleCharIndex -= 1
             
-            if !possibleMove(numbers: boardNumbers, possibleMoves: &possibleMoves, color, possibleCharIndex, possibleNumberIndex) {
+            if !possibleMove(possibleMoves: &possibleMoves, possibleCharIndex, possibleNumberIndex) {
                 break
             }
         }
-        
         
         return possibleMoves
     }

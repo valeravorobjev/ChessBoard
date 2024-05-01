@@ -7,24 +7,31 @@
 
 import SwiftUI
 
-public struct BoardView: View {
-    @ObservedObject public var board: Board
-    
+public struct BoardView<T: BoardCommon>: View {
+    @ObservedObject public var board: T
+    private let moveReportEvent: ((_ moveReport: MoveReport?) -> Void)?
+
     public init() {
-        self.board = Board()
+        board = BoardDefault() as! T
+        moveReportEvent = nil
     }
-    public init(board: Board) {
+
+    public init(board: T, moveReportEvent: ((_ moveReport: MoveReport?) -> Void)? = nil) {
         self.board = board
+        self.moveReportEvent = moveReportEvent
     }
-    
+
     public var body: some View {
         GeometryReader { geometry in
             Grid(horizontalSpacing: 0, verticalSpacing: 0) {
-                ForEach(0..<board.boardNumbers.count, id: \.self) { i in
+                ForEach(0..<board.boardNumbersCount, id: \.self) { i in
                     GridRow {
-                        ForEach(0..<board.boardChars.count, id: \.self) { j in
+                        ForEach(0..<board.boardCharsCount, id: \.self) { j in
                             CellView(cell: board.cells[i][j], onSelected: {
-                                board.selectCell(cell: board.cells[i][j])
+                                let moveReport = board.processing(board.cells[i][j])
+                                if moveReportEvent != nil {
+                                    moveReportEvent!(moveReport)
+                                }
                             })
                         }
                     }
@@ -35,5 +42,7 @@ public struct BoardView: View {
 }
 
 #Preview {
-    BoardView(board: Board()).padding(100)
+    BoardView(board: BoardDefault(), moveReportEvent: { moveReport in
+        print("\(moveReport?.uci)")
+    }).padding(100)
 }

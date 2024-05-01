@@ -7,74 +7,67 @@
 
 import Foundation
 
-extension Board {
-    func pownPossibleMoves(_ location: LocationIndex, _ color: PieceColor)-> [LocationIndex] {
-        
+extension ShadowBoard {
+    func pownPossibleMoves(_ location: LocationIndex) -> [LocationIndex] {
         var possibles = [LocationIndex]()
         
         let nidx = location.nidx
         let sidx = location.sidx
         
         // Check whether the pawn can rotate one or two moves
-        if lessOrEqualsEnd(nidx) {
-            let possibleOne = LocationIndex(sidx: sidx, nidx: nextStepNumber(nidx, 1))
+        if !lessNumberEndIndex(nidx) {
+            return possibles
+        }
+        
+        let possibleOne = LocationIndex(sidx: sidx, nidx: nextStepNumber(nidx, 1))
+        
+        if self.board[possibleOne.nidx][possibleOne.sidx] == nil {
+            _ = possibleMove(possibleMoves: &possibles, possibleOne.sidx, possibleOne.nidx)
+        }
             
-            // if cell is null, pawn can be moved one step
-            if self.cells[possibleOne.nidx][possibleOne.sidx].piece == nil {
-                possibles.append(possibleOne)
-                
-                
-                if nidx == pownStartNIdx() {
-                    let possibleTwo = LocationIndex(sidx: possibleOne.sidx, nidx: nextStepNumber(possibleOne.nidx, 1))
-                    
-                    // if cell is null, pawn can be moved one step
-                    if self.cells[possibleTwo.nidx][possibleTwo.sidx].piece == nil {
-                        possibles.append(possibleTwo)
-                    }
-                }
-                
+        if nidx == self.pownStartNIdx() {
+            let possibleTwo = LocationIndex(sidx: possibleOne.sidx, nidx: nextStepNumber(possibleOne.nidx, 1))
+            
+            if self.board[possibleTwo.nidx][possibleTwo.sidx] == nil {
+                _ = possibleMove(possibleMoves: &possibles, possibleTwo.sidx, possibleTwo.nidx)
             }
         }
         
-        let nextPossibleUpStep = nextStepNumber(nidx, 1)
-        if lessOrEqualsEnd(nextPossibleUpStep) {
-            
-            if sidx != endCharIndex {
-                let possibleUpRight = LocationIndex(sidx: nexStepChar(sidx, 1), nidx: nextPossibleUpStep)
-                let piece = self.cells[possibleUpRight.nidx][possibleUpRight.sidx].piece
-                
-                if piece != nil && piece?.color != color {
-                    possibles.append(possibleUpRight)
-                }
+        let possibleUpRight = LocationIndex(sidx: nexStepChar(sidx, 1), nidx: possibleOne.nidx)
+        let possibleUpLeft = LocationIndex(sidx: backStepChar(sidx, 1), nidx: possibleOne.nidx)
+        
+        if lessOrEqualNumberEndIndex(possibleUpRight.nidx) && biggerOrEqualNumberStartIndex(possibleUpRight.nidx) && lessOrEqualCharEndIndex(possibleUpRight.sidx) {
+            if self.board[possibleUpRight.nidx][possibleUpRight.sidx] != nil
+                && self.board[possibleUpRight.nidx][possibleUpRight.sidx]?.color != playerColor
+            {
+                _ = possibleMove(possibleMoves: &possibles, possibleUpRight.sidx, possibleUpRight.nidx)
             }
-            
-            if sidx != beginCharIndex {
-                let possibleUpLeft = LocationIndex(sidx: backStepChar(sidx, 1), nidx: nextPossibleUpStep)
-                let piece = self.cells[possibleUpLeft.nidx][possibleUpLeft.sidx].piece
-                
-                if piece != nil && piece?.color != color {
-                    possibles.append(possibleUpLeft)
-                }
-            }
-            
         }
-    
+        
+        if lessOrEqualNumberEndIndex(possibleUpLeft.nidx) && biggerOrEqualNumberStartIndex(possibleUpLeft.nidx) && biggerOrEqualCharStartIndex(possibleUpLeft.sidx) {
+            if self.board[possibleUpLeft.nidx][possibleUpLeft.sidx] != nil
+                && self.board[possibleUpLeft.nidx][possibleUpLeft.sidx]?.color != playerColor
+            {
+                _ = possibleMove(possibleMoves: &possibles, possibleUpLeft.sidx, possibleUpLeft.nidx)
+            }
+        }
         
         return possibles
-        
     }
     
     func pownStartNIdx() -> Int {
-        
         if self.playerColor == .white {
             if !self.rotated {
-                return 6
+                return numberStartIndex - 1
             } else {
-                return 1
+                return numberStartIndex + 1
+            }
+        } else {
+            if !self.rotated {
+                return numberStartIndex + 1
+            } else {
+                return numberStartIndex - 1
             }
         }
-        
-        return 1
-        
     }
 }
