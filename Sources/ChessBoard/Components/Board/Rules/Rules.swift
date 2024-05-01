@@ -8,8 +8,12 @@
 import Foundation
 
 extension ShadowBoard {
-    func possibleMoves(by: PieceType, location: LocationIndex) -> [LocationIndex] {
+    func possibleMoves(by: PieceType, location: LocationIndex, changePlayerColor: Bool = false) -> [LocationIndex] {
         var possibles: [LocationIndex] = []
+        
+        if changePlayerColor {
+            changePlayer()
+        }
         
         switch by {
         case .pown:
@@ -26,6 +30,10 @@ extension ShadowBoard {
             possibles = self.kingPossibleMoves(location)
         }
         
+        if changePlayerColor {
+            changePlayer()
+        }
+                
         return possibles
     }
     
@@ -88,6 +96,54 @@ extension ShadowBoard {
         return self.boardChars.count - 1
     }
     
+    func lessCharEndIndex(_ sidx: Int) -> Bool {
+        if self.playerColor == .white {
+            if !self.rotated && sidx < boardChars.count - 1 {
+                return true
+            } else if self.rotated && sidx > 0 {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        if self.playerColor == .black {
+            if !self.rotated && sidx > 0 {
+                return true
+            } else if self.rotated && sidx < self.boardNumbers.count - 1 {
+                return true
+            } else {
+                return false
+            }
+        }
+    
+        return false
+    }
+    
+    func biggerCharStartIndex(_ sidx: Int) -> Bool {
+        if self.playerColor == .white {
+            if !self.rotated && sidx > 0 {
+                return true
+            } else if self.rotated && sidx < self.boardChars.count - 1 {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        if self.playerColor == .black {
+            if !self.rotated && sidx < self.boardNumbers.count - 1 {
+                return true
+            } else if self.rotated && sidx > 0 {
+                return true
+            } else {
+                return false
+            }
+        }
+    
+        return false
+    }
+    
     func lessNumberEndIndex(_ nidx: Int) -> Bool {
         if self.playerColor == .white {
             if !self.rotated && nidx > 0 {
@@ -112,11 +168,157 @@ extension ShadowBoard {
         return false
     }
     
+    func biggerNumberStartIndex(_ nidx: Int) -> Bool {
+        if self.playerColor == .white {
+            if !self.rotated && nidx < self.boardNumbers.count - 1 {
+                return true
+            } else if self.rotated && nidx > 0 {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        if self.playerColor == .black {
+            if !self.rotated && nidx > 0 {
+                return true
+            } else if self.rotated && nidx < self.boardNumbers.count - 1 {
+                return true
+            } else {
+                return false
+            }
+        }
+    
+        return false
+    }
+    
+    func lessOrEqualCharEndIndex(_ sidx: Int) -> Bool {
+        if self.playerColor == .white {
+            if !self.rotated && sidx <= boardChars.count - 1 {
+                return true
+            } else if self.rotated && sidx >= 0 {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        if self.playerColor == .black {
+            if !self.rotated && sidx >= 0 {
+                return true
+            } else if self.rotated && sidx <= self.boardNumbers.count - 1 {
+                return true
+            } else {
+                return false
+            }
+        }
+    
+        return false
+    }
+    
+    func biggerOrEqualCharStartIndex(_ sidx: Int) -> Bool {
+        if self.playerColor == .white {
+            if !self.rotated && sidx >= 0 {
+                return true
+            } else if self.rotated && sidx <= self.boardChars.count - 1 {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        if self.playerColor == .black {
+            if !self.rotated && sidx <= self.boardNumbers.count - 1 {
+                return true
+            } else if self.rotated && sidx >= 0 {
+                return true
+            } else {
+                return false
+            }
+        }
+    
+        return false
+    }
+    
+    func lessOrEqualNumberEndIndex(_ nidx: Int) -> Bool {
+        if self.playerColor == .white {
+            if !self.rotated && nidx >= 0 {
+                return true
+            } else if self.rotated && nidx <= self.boardNumbers.count - 1 {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        if self.playerColor == .black {
+            if !self.rotated && nidx <= self.boardNumbers.count - 1 {
+                return true
+            } else if self.rotated && nidx >= 0 {
+                return true
+            } else {
+                return false
+            }
+        }
+    
+        return false
+    }
+    
+    func biggerOrEqualNumberStartIndex(_ nidx: Int) -> Bool {
+        if self.playerColor == .white {
+            if !self.rotated && nidx <= self.boardNumbers.count - 1 {
+                return true
+            } else if self.rotated && nidx >= 0 {
+                return true
+            } else {
+                return false
+            }
+        }
+        
+        if self.playerColor == .black {
+            if !self.rotated && nidx >= 0 {
+                return true
+            } else if self.rotated && nidx <= self.boardNumbers.count - 1 {
+                return true
+            } else {
+                return false
+            }
+        }
+    
+        return false
+    }
+    
     func nexStepChar(_ sidx: Int, _ steps: Int) -> Int {
-        return sidx + steps
+        if playerColor == .white {
+            if !rotated {
+                return sidx + steps
+            } else {
+                return sidx - steps
+            }
+            
+        } else {
+            if !rotated {
+                return sidx - steps
+            } else {
+                return sidx + steps
+            }
+        }
     }
     
     func backStepChar(_ sidx: Int, _ steps: Int) -> Int {
-        return sidx - steps
+        if playerColor == .white {
+            if !rotated {
+                return sidx - steps
+            } else {
+                return sidx + steps
+            }
+            
+        } else {
+            if !rotated {
+                return sidx + steps
+            } else {
+                return sidx - steps
+            }
+        }
     }
 }

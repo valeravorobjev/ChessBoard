@@ -29,7 +29,7 @@ final class BoardTests: XCTestCase {
         
         _ = board.processing(board.getCell(LocationCell("c", 2)))
         _ = board.processing(board.getCell(LocationCell("c", 3)))
-        _ = board.processing(board.getCell(LocationCell("c", 2)))
+//        _ = board.processing(board.getCell(LocationCell("c", 4)))
 //        _ = board.processing(board.getCell(LocationCell("c", 5)))
 //        _ = board.processing(board.getCell(LocationCell("c", 5)))
 //        _ = board.processing(board.getCell(LocationCell("c", 6)))

@@ -36,14 +36,20 @@ extension ShadowBoard {
         let possibleUpRight = LocationIndex(sidx: nexStepChar(sidx, 1), nidx: possibleOne.nidx)
         let possibleUpLeft = LocationIndex(sidx: backStepChar(sidx, 1), nidx: possibleOne.nidx)
         
-        if self.board[possibleUpRight.nidx][possibleUpRight.sidx] != nil 
-            && self.board[possibleUpRight.nidx][possibleUpRight.sidx]?.color != playerColor {
-            _ = possibleMove(possibleMoves: &possibles, possibleUpRight.sidx, possibleUpRight.nidx)
+        if lessOrEqualNumberEndIndex(possibleUpRight.nidx) && biggerOrEqualNumberStartIndex(possibleUpRight.nidx) && lessOrEqualCharEndIndex(possibleUpRight.sidx) {
+            if self.board[possibleUpRight.nidx][possibleUpRight.sidx] != nil
+                && self.board[possibleUpRight.nidx][possibleUpRight.sidx]?.color != playerColor
+            {
+                _ = possibleMove(possibleMoves: &possibles, possibleUpRight.sidx, possibleUpRight.nidx)
+            }
         }
         
-        if self.board[possibleUpLeft.nidx][possibleUpLeft.sidx] != nil 
-            && self.board[possibleUpLeft.nidx][possibleUpLeft.sidx]?.color != playerColor {
-            _ = possibleMove(possibleMoves: &possibles, possibleUpLeft.sidx, possibleUpLeft.nidx)
+        if lessOrEqualNumberEndIndex(possibleUpLeft.nidx) && biggerOrEqualNumberStartIndex(possibleUpLeft.nidx) && biggerOrEqualCharStartIndex(possibleUpLeft.sidx) {
+            if self.board[possibleUpLeft.nidx][possibleUpLeft.sidx] != nil
+                && self.board[possibleUpLeft.nidx][possibleUpLeft.sidx]?.color != playerColor
+            {
+                _ = possibleMove(possibleMoves: &possibles, possibleUpLeft.sidx, possibleUpLeft.nidx)
+            }
         }
         
         return possibles

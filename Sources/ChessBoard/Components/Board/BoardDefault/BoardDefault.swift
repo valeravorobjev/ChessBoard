@@ -51,7 +51,17 @@ public class BoardDefault: BoardCommon {
     
     public func changeBoardMode(mode: BoardMode) {}
     
-    public func changePlayer() {}
+    public func changePlayer() {
+        shadowBoard.changePlayer()
+    }
+    
+    public func stopGame() {
+        shadowBoard.lockBoard()
+    }
+    
+    public func continueGame() {
+        shadowBoard.unlockBoard()
+    }
     
     public func rotateBoard() {
         selectedCell?.unselected()
@@ -129,6 +139,10 @@ public class BoardDefault: BoardCommon {
     }
     
     private func processingGame(_ cell: Cell) -> MoveReport? {
+        if shadowBoard.lock {
+            return nil
+        }
+        
         let pieceOperationType = shadowBoard.checkPieceOperationType(location: shadowBoard.convertLCtoLI(cell.location), possibles: possibleCells.map { shadowBoard.convertLCtoLI($0.location)
         })
         
@@ -191,11 +205,17 @@ public class BoardDefault: BoardCommon {
         return cells[li.nidx][li.sidx]
     }
     
-    private func move(from: LocationCell, to: LocationCell) -> MoveReport {
+    private func move(from: LocationCell, to: LocationCell) -> MoveReport? {
         let fromCell = getCellByLocationCell(from)
         let toCell = getCellByLocationCell(to)
         
         let smr = shadowBoard.move(from: shadowBoard.convertLCtoLI(from), to: shadowBoard.convertLCtoLI(to))
+        
+        if shadowBoard.checkKing() {
+            _ = shadowBoard.move(from: shadowBoard.convertLCtoLI(to), to: shadowBoard.convertLCtoLI(from))
+            return nil
+        }
+        
         let mr = shadowBoard.convertSMRtoMR(smr)
         
         let tmp = fromCell.piece!

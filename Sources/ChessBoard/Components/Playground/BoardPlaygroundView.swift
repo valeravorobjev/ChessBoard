@@ -20,6 +20,8 @@ struct BoardPlaygroundView: View {
                 Button("MakeMove") {
                     _ = board.makeMove(from: LocationCell("c", 2), to: LocationCell("c", 4))
                 }
+                Button("StopGame", action: board.stopGame)
+                Button("ContinueGame", action: board.continueGame)
             }
             BoardView(board: board)
         }.padding(100)

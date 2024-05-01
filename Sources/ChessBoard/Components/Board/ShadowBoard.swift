@@ -15,6 +15,7 @@ class ShadowBoard {
     private(set) var boardChars: [Character] = ["a", "b", "c", "d", "e", "f", "g", "h"]
     private(set) var whiteKingLI: LocationIndex = .init(sidx: 4, nidx: 7)
     private(set) var blackKingLI: LocationIndex = .init(sidx: 4, nidx: 0)
+    private(set) var lock: Bool = false
 
     private(set) var board: [[Piece?]]
 
@@ -32,6 +33,14 @@ class ShadowBoard {
         self.boardChars = boardChars
 
         board = Array(repeating: Array(repeating: nil, count: boardNumbers.count), count: boardChars.count)
+    }
+
+    init(playerColor: PieceColor, boardMode: BoardMode, boardNumbers: [Int], boardChars: [Character], board: [[Piece?]]) {
+        self.playerColor = playerColor
+        self.boardMode = boardMode
+        self.boardNumbers = boardNumbers
+        self.boardChars = boardChars
+        self.board = board
     }
 
     var numberStartIndex: Int {
@@ -66,11 +75,35 @@ class ShadowBoard {
         }
     }
 
-    func isCheck(color: PieceColor) -> Bool {
+    func lockBoard() {
+        lock = true
+    }
+
+    func unlockBoard() {
+        lock = false
+    }
+
+    func changePlayer() -> Void {
+        playerColor = playerColor.toggle()
+    }
+
+    func checkKing() -> Bool {
+        for i in 0..<boardNumbers.count {
+            for j in 0..<boardChars.count {
+                let piece = board[i][j]
+                if piece == nil || piece!.color == playerColor {
+                    continue
+                }
+
+                if canAttak(piece!, LocationIndex(sidx: j, nidx: i)) {
+                    return true
+                }
+            }
+        }
         return false
     }
 
-    func isCheckmate(color: PieceColor) -> Bool {
+    func checkKingMate() -> Bool {
         return false
     }
 
@@ -221,5 +254,18 @@ class ShadowBoard {
             }
             print()
         }
+    }
+
+    func canAttak(_ piece: Piece, _ location: LocationIndex) -> Bool {
+        let possibles = possibleMoves(by: piece.type, location: location, changePlayerColor: true)
+        let playerKing = playerColor == .white ? whiteKingLI : blackKingLI
+
+        for possible in possibles {
+            if possible.nidx == playerKing.nidx && possible.sidx == playerKing.sidx {
+                return true
+            }
+        }
+
+        return false
     }
 }

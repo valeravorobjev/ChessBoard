@@ -40,6 +40,10 @@ public protocol BoardCommon: ObservableObject {
     ///  - to: Target coordinate
     /// - Returns:Move report that contains move details. If the function returned nil, then it is impossible to make a move
     func makeMove(from: LocationCell, to: LocationCell) -> MoveReport?
+    /// Stop game
+    func stopGame() -> Void
+    /// Continue game
+    func continueGame() -> Void
 
     /// The cells on the chessboard
     var cells: [[Cell]] { get }
