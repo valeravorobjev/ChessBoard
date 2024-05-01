@@ -15,3 +15,5 @@ Unfortunately, the project remained unfinished. But it's not a big deal, if you 
 <img title="Screen1" alt="Screen1" src="/Images/screen1.png">
 <img title="Screen2" alt="Screen2" src="/Images/screen2.png">
 <img title="Screen3" alt="Screen3" src="/Images/screen3.png">
+
+This project is a package, so theoretically it can be added to your chess project. But since this package is not ready, it is better not to do it.
