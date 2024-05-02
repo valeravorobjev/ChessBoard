@@ -39,4 +39,12 @@ public struct ShadowMoveReport {
         self.checkKing = checkKing
         self.checkMate = checkMate
     }
+
+    mutating func setCheckKing(_ check: Bool) -> Void {
+        checkKing = check
+    }
+
+    mutating func setCheckMate(_ check: Bool) -> Void {
+        checkMate = check
+    }
 }

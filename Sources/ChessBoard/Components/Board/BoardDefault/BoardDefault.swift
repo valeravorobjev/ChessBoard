@@ -185,7 +185,7 @@ public class BoardDefault: BoardCommon {
 
             possibleCells.removeAll()
 
-            let moveReport: MoveReport? = move(from: selectedCell!.location, to: cell.location)
+            let moveReport: MoveReport? = move(piece: selectedCell!.piece!, from: selectedCell!.location, to: cell.location)
             
             resetSelected()
             return moveReport
@@ -213,11 +213,14 @@ public class BoardDefault: BoardCommon {
         return cells[li.nidx][li.sidx]
     }
     
-    private func move(from: LocationCell, to: LocationCell) -> MoveReport? {
+    private func move(piece: Piece, from: LocationCell, to: LocationCell) -> MoveReport? {
         let fromCell = getCellByLocationCell(from)
         let toCell = getCellByLocationCell(to)
         
-        let smr = shadowBoard.move(from: shadowBoard.convertLCtoLI(from), to: shadowBoard.convertLCtoLI(to))
+        let fromLI = shadowBoard.convertLCtoLI(from)
+        let toLI = shadowBoard.convertLCtoLI(to)
+        
+        let smr = shadowBoard.moveAndCheck(piece: piece, from: fromLI, to: toLI)
         
         let mr = shadowBoard.convertSMRtoMR(smr)
         
@@ -225,6 +228,13 @@ public class BoardDefault: BoardCommon {
         
         fromCell.removePiece()
         toCell.setPiece(tmp.type, tmp.color)
+        
+        let opponentKing = shadowBoard.playerColor == .white ? shadowBoard.blackKingLI : shadowBoard.whiteKingLI
+        if mr.checkKing {
+            cells[opponentKing.nidx][opponentKing.sidx].checkKing = true
+        } else if cells[opponentKing.nidx][opponentKing.sidx].checkKing {
+            cells[opponentKing.nidx][opponentKing.sidx].checkKing = false
+        }
         
         return mr
     }

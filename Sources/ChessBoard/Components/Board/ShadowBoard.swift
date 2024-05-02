@@ -250,6 +250,17 @@ class ShadowBoard {
         return report
     }
 
+    func moveAndCheck(piece: Piece, from: LocationIndex, to: LocationIndex) -> ShadowMoveReport {
+        var report = move(from: from, to: to)
+
+        if canAttakKing(self, piece, to) {
+            report.setCheckKing(true)
+            return report
+        }
+
+        return report
+    }
+
     func printBoardCoords() -> Void {
         for i in 0..<boardNumbers.count {
             for j in 0..<boardChars.count {
