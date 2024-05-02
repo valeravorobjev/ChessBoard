@@ -23,13 +23,13 @@ extension ShadowBoard {
         
         if self.board[possibleOne.nidx][possibleOne.sidx] == nil {
             _ = possibleMove(possibleMoves: &possibles, possibleOne.sidx, possibleOne.nidx)
-        }
             
-        if nidx == self.pownStartNIdx() {
-            let possibleTwo = LocationIndex(sidx: possibleOne.sidx, nidx: nextStepNumber(possibleOne.nidx, 1))
-            
-            if self.board[possibleTwo.nidx][possibleTwo.sidx] == nil {
-                _ = possibleMove(possibleMoves: &possibles, possibleTwo.sidx, possibleTwo.nidx)
+            if nidx == self.pownStartNIdx() {
+                let possibleTwo = LocationIndex(sidx: possibleOne.sidx, nidx: nextStepNumber(possibleOne.nidx, 1))
+                
+                if self.board[possibleTwo.nidx][possibleTwo.sidx] == nil {
+                    _ = possibleMove(possibleMoves: &possibles, possibleTwo.sidx, possibleTwo.nidx)
+                }
             }
         }
         
