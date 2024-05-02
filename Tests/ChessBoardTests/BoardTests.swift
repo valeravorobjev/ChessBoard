@@ -52,7 +52,7 @@ final class BoardTests: XCTestCase {
         let board = BoardDefault(boardMode: .game, playerColor: .white)
         board.initBoard()
         
-        board.processing(board.cells[6][2])
+        _ = board.processing(board.cells[6][2])
         
         assert(board.selectedCell != nil, "selected cell can't be nil")
         assert(board.selectedCell?.piece != nil, "selected cell must have piece pown")
@@ -63,19 +63,19 @@ final class BoardTests: XCTestCase {
         assert(board.possibleCells[0].location.char == "c" && board.possibleCells[0].location.number == 3, "possible cell must be c3")
         assert(board.possibleCells[1].location.char == "c" && board.possibleCells[1].location.number == 4, "possible cell must be c4")
         
-        board.processing(board.cells[4][2])
+        _ = board.processing(board.cells[4][2])
         assert(board.selectedCell?.location.toStr() == "c4", "pown must be on c4 cell")
         
-        board.processing(board.cells[3][2])
+        _ = board.processing(board.cells[3][2])
         assert(board.selectedCell?.location.toStr() == "c5", "pown must be on c5 cell")
         
-        board.processing(board.cells[2][2])
+        _ = board.processing(board.cells[2][2])
         assert(board.selectedCell?.location.toStr() == "c6", "pown must be on c6 cell")
         
-        board.processing(board.cells[1][1])
+        _ = board.processing(board.cells[1][1])
         assert(board.selectedCell?.location.toStr() == "b7", "pown must be on b7 cell")
         
-        board.processing(board.cells[0][2])
+        _ = board.processing(board.cells[0][2])
         assert(board.selectedCell?.location.toStr() == "c8", "pown must be on c8 cell")
     }
 

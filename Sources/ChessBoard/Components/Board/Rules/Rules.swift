@@ -8,12 +8,8 @@
 import Foundation
 
 extension ShadowBoard {
-    func possibleMoves(by: PieceType, location: LocationIndex, changePlayerColor: Bool = false) -> [LocationIndex] {
+    func possibleMoves(by: PieceType, location: LocationIndex) -> [LocationIndex] {
         var possibles: [LocationIndex] = []
-        
-        if changePlayerColor {
-            changePlayer()
-        }
         
         switch by {
         case .pown:
@@ -28,10 +24,6 @@ extension ShadowBoard {
             possibles = self.queenPossibleMoves(location)
         case .king:
             possibles = self.kingPossibleMoves(location)
-        }
-        
-        if changePlayerColor {
-            changePlayer()
         }
                 
         return possibles

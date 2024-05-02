@@ -43,6 +43,6 @@ public struct BoardView<T: BoardCommon>: View {
 
 #Preview {
     BoardView(board: BoardDefault(), moveReportEvent: { moveReport in
-        print("\(moveReport?.uci)")
+        print("\(moveReport?.uci ?? "")")
     }).padding(100)
 }

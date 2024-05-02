@@ -24,7 +24,7 @@ struct BoardPlaygroundView: View {
                 Button("ContinueGame", action: board.continueGame)
             }
             BoardView(board: board)
-        }
+        }.padding(100)
     }
 }
 

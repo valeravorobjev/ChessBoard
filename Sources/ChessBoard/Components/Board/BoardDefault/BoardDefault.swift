@@ -163,7 +163,15 @@ public class BoardDefault: BoardCommon {
             
             let possibleIndexes = shadowBoard.possibleMoves(by: selectedCell!.piece!.type, location: selectedIndex!)
             
+            if possibleIndexes.isEmpty {
+                return nil
+            }
+            
             for possibleIndex in possibleIndexes {
+                if shadowBoard.checkKing(location: selectedIndex!, possible: possibleIndex) {
+                    continue
+                }
+                
                 let possibleCell = cells[possibleIndex.nidx][possibleIndex.sidx]
                 possibleCell.possible.toggle()
                 possibleCells.append(possibleCell)
@@ -210,11 +218,6 @@ public class BoardDefault: BoardCommon {
         let toCell = getCellByLocationCell(to)
         
         let smr = shadowBoard.move(from: shadowBoard.convertLCtoLI(from), to: shadowBoard.convertLCtoLI(to))
-        
-        if shadowBoard.checkKing() {
-            _ = shadowBoard.move(from: shadowBoard.convertLCtoLI(to), to: shadowBoard.convertLCtoLI(from))
-            return nil
-        }
         
         let mr = shadowBoard.convertSMRtoMR(smr)
         

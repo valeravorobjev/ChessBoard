@@ -87,7 +87,13 @@ class ShadowBoard {
         playerColor = playerColor.toggle()
     }
 
-    func checkKing() -> Bool {
+    func checkKing(location: LocationIndex, possible: LocationIndex) -> Bool {
+        let opponentColor = playerColor == .white ? PieceColor.black : PieceColor.white
+
+        let virtualBoard = ShadowBoard(playerColor: opponentColor, boardMode: boardMode, boardNumbers: boardNumbers, boardChars: boardChars, board: board)
+
+        _ = virtualBoard.move(from: location, to: possible)
+
         for i in 0..<boardNumbers.count {
             for j in 0..<boardChars.count {
                 let piece = board[i][j]
@@ -95,7 +101,13 @@ class ShadowBoard {
                     continue
                 }
 
-                if canAttak(piece!, LocationIndex(sidx: j, nidx: i)) {
+                let pieceLocation = LocationIndex(sidx: j, nidx: i)
+
+                if pieceLocation == possible {
+                    return false
+                }
+
+                if canAttakKing(virtualBoard, piece!, pieceLocation) {
                     return true
                 }
             }
@@ -256,12 +268,12 @@ class ShadowBoard {
         }
     }
 
-    func canAttak(_ piece: Piece, _ location: LocationIndex) -> Bool {
-        let possibles = possibleMoves(by: piece.type, location: location, changePlayerColor: true)
-        let playerKing = playerColor == .white ? whiteKingLI : blackKingLI
+    func canAttakKing(_ virtualBoard: ShadowBoard, _ piece: Piece, _ location: LocationIndex) -> Bool {
+        let possibles = virtualBoard.possibleMoves(by: piece.type, location: location)
+        let opponentKing = virtualBoard.playerColor == .white ? virtualBoard.blackKingLI : virtualBoard.whiteKingLI
 
         for possible in possibles {
-            if possible.nidx == playerKing.nidx && possible.sidx == playerKing.sidx {
+            if possible.nidx == opponentKing.nidx && possible.sidx == opponentKing.sidx {
                 return true
             }
         }
