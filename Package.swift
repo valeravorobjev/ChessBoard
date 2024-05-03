@@ -7,13 +7,14 @@ let package = Package(
     name: "ChessBoard",
     platforms: [
         .macOS(.v14),
-        .iOS(.v17)
+        .iOS(.v17),
     ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "ChessBoard",
-            targets: ["ChessBoard"]),
+            targets: ["ChessBoard"]
+        ),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -24,6 +25,7 @@ let package = Package(
         ),
         .testTarget(
             name: "ChessBoardTests",
-            dependencies: ["ChessBoard"]),
+            dependencies: ["ChessBoard"]
+        ),
     ]
 )
